@@ -1,0 +1,89 @@
+/* Header */
+.navbarBg{
+  background-color: #f4f3f8;
+}
+.navitems:hover{
+  background-color: #d2d6e0;
+  transition: all 0.5s ease-in-out;
+  border-radius: 15px;
+  color: #8f8f8f;
+  font-weight: 400;
+  /* position: relative; */
+}
+.searchbar{
+ width:300px
+}
+.profileicon{
+  height: 35px;
+  width:auto;
+  margin:10px;
+  cursor:pointer;
+}
+
+
+/* Body */
+
+.appContainer{
+  display: flex;
+}
+.sideSection{
+  background-color:#f4f3f8 ;
+  width:80px;
+  display: flex;
+  flex-direction: column;  
+  padding: 20px;
+  align-items: center;
+  height: 88vh;
+
+}
+
+
+.sideSection_icon {
+  color:blue;
+  cursor:pointer;
+  margin-top:20px;
+  margin-bottom: 20px;
+  height: 22px;
+  width: auto;
+  margin-right: 10px;
+  transition: color 0.3s;
+}
+.sideSection_text{
+  display:none;
+  cursor: pointer;
+}
+.sideSection:hover{
+  width:200px;
+  align-items:start;
+}
+
+.sideSection:hover .sideSection_text{
+  display:inline;
+  
+}
+
+.sideSection_item{
+  cursor:pointer
+}
+.sideSection_item:hover{
+  transform: scale(1.2);
+  color:green
+}
+.sideSection_item:hover.sideSection_icon{
+  transform: scale(1.2);
+  color:green
+}
+.dropdown_content {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  display: none;
+  background-color: #ffffff;
+  border: 1px solid #d2d2d2;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 10px;
+  z-index: 0; /* Ensure the dropdown appears above other elements */
+}
+.sideSection_item:hover .dropdown_content {
+  display: block;
+}
