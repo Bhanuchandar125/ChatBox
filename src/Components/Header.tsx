@@ -21,14 +21,9 @@ function Header() {
             style={{ maxHeight: '100px' }}
             navbarScroll
           >
-            <Nav.Link className='navitems' href="#action1">Chats</Nav.Link>
-            <Nav.Link className='navitems' href="#action2">Spaces</Nav.Link>
-            
-            <Nav.Link className='navitems' href="#action3" >
-              Meets
-            </Nav.Link>
+           
             <NavDropdown className='navitems' title="Active" id="navbarScrollingDropdown">
-              <NavDropdown.Item href="#action3">Active</NavDropdown.Item>
+              <NavDropdown.Item href="#action3"><span className='active'></span>Active</NavDropdown.Item>
               <NavDropdown.Item href="#action4">
                 Do not disturb
               </NavDropdown.Item>

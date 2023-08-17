@@ -2,7 +2,9 @@ import React from 'react';
 import { BsChatRightText } from 'react-icons/bs';
 import { GoPeople } from 'react-icons/go';
 import { BiVideoPlus } from 'react-icons/bi';
-import Sidebar from './Sidebar';
+import ChatContainer from './ChatContainer';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+
 
 
 const Body = () => {
@@ -12,31 +14,23 @@ const Body = () => {
         <div className='sideSection'>
           <div className="sideSection_item">
             <BsChatRightText className="sideSection_icon" /> 
-            <span className='sideSection_text'>Chat</span>
-            <div className='dropdown_content'>
-              <p>Bhanu</p>
-              <p>Vasudev</p>
-            </div>
+            <span className='sideSection_text'>Chat</span><ExpandMoreIcon className="expandmore"/>
+            
           </div>
           <div className="sideSection_item">
+            
             <GoPeople className="sideSection_icon" />
             <span className='sideSection_text'>spaces</span>
-            <div className='dropdown_content'>
-              {/* Dropdown content for Spaces */}
-              {/* Add your content here */}
-            </div>
+            
           </div>
           <div className="sideSection_item">
             <BiVideoPlus className="sideSection_icon" />
             <span className='sideSection_text'>Meet</span>
-            <div className='dropdown_content'>
-              {/* Dropdown content for Meet */}
-              {/* Add your content here */}
-            </div>
+            
           </div>
         </div>
         <div className='mainSection'>
-            
+            <ChatContainer/>
         </div>
       </div>
     </div>
