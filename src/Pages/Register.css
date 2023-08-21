@@ -1,0 +1,44 @@
+.Registerbg {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh; 
+    background-color: #f5f5f5; 
+  }
+  
+  .RegisterBox {
+    background-color: lightgray;
+    width: 100%; 
+    max-width: 500px; 
+    padding: 20px; 
+    border-radius: 10px; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+    text-align: start;
+  }
+  
+  
+  @media (max-width: 600px) {
+    .RegisterBox {
+      max-width: 90%; 
+    }
+  }
+  .inputel{
+    width:100%;
+    
+  }
+  .submit{
+    border-style: none;
+    background-color: lightcoral;
+    color:white;
+    width:70px;
+    border-radius: 5px;
+  }
+  .submit:hover {
+    background-color: green; 
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out; 
+  }
+  .validationerror{
+    color:red
+  }

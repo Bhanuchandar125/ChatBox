@@ -1,16 +1,13 @@
-
 import './App.css'
-import Header from './Components/Header'
 import '../src/index.css'
-import Body from './Components/Body'
+import AppRoutes from './Routes/AppRoutes'
 
 function App() {
  
 
   return (
     <>
-    <Header/>
-    <Body/>
+      <AppRoutes/>
     </>
   )
 }
