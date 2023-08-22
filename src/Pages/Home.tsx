@@ -6,7 +6,7 @@ const Home = () => {
   const user = localStorage.getItem("user")
   console.log("user", user)
   return (
-    <div>
+    <div className='homeBg'>
         <Header/>
         <Body/>
     </div>

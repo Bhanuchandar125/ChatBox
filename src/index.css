@@ -1,8 +1,13 @@
-/* Header */
-.navbarBg{
-  background-color: #f4f3f8;
+.homeBg {
+  height: 100vh;
 }
-.navitems:hover{
+
+/* Header */
+.navbarBg {
+  background-color: #f4f3f8;
+  height: 12%;
+}
+.navitems:hover {
   background-color: #d2d6e0;
   transition: all 0.5s ease-in-out;
   border-radius: 15px;
@@ -10,80 +15,61 @@
   font-weight: 400;
   /* position: relative; */
 }
-.searchbar{
- width:300px
+.searchbar {
+  width: 300px;
 }
-.profileicon{
+.profileicon {
   height: 35px;
-  width:auto;
-  margin:10px;
-  cursor:pointer;
+  width: auto;
+  margin: 10px;
+  cursor: pointer;
 }
-
 
 /* Body */
 
-.appContainer{
+.appContainer {
   display: flex;
+  width: 100vw;
+  height: 88%;
 }
-.sideSection{
-  background-color:#f4f3f8 ;
-  width:80px;
+.mainSection {
+  width: 90%;
+}
+.sideSection {
+  background-color: #f4f3f8;
+  width: 10%;
   display: flex;
-  flex-direction: column;  
+  flex-direction: column;
   padding: 20px;
-  align-items: center;
   height: 88vh;
-
 }
 
 .sideSection_icon {
-  color:blue;
-  cursor:pointer;
-  margin-top:20px;
+  color: blue;
+  cursor: pointer;
+  margin-top: 20px;
   margin-bottom: 20px;
   height: 22px;
   width: auto;
   margin-right: 10px;
   transition: color 0.3s;
 }
-.sideSection_text{
-  display:none;
+.sideSection_text {
   cursor: pointer;
 }
-.sideSection:hover{
-  width:200px;
-  align-items:start;
-  z-index: 10;
+.sideSection_item {
+  cursor: pointer;
 }
-
-.sideSection:hover .sideSection_text{
-  display:inline;
-  
-}
-
-.sideSection_item{
-  cursor:pointer
-}
-.sideSection_item:hover{
+.sideSection_item:hover {
   transform: scale(1.2);
-  color:green
-}
-.sideSection_item:hover.sideSection_icon{
-  transform: scale(1.2);
-  color:green
+  color: green;
 }
 
-.active{
+.active {
   height: 12px;
-  width:12px;
+  width: 12px;
   border-radius: 50%;
 }
-.expandmore{
-  display:none;
-  
+.expandmore {
+  display: none;
 }
-.sideSection:hover.expandmore{
-  display: inline;
-}
-

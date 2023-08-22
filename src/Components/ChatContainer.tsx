@@ -1,34 +1,33 @@
-import React from 'react'
-import './ChatContainer.css';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { ExpandMore } from '@mui/icons-material';
-import { BiVideo } from 'react-icons/bi';
-
-
-
+import React from "react";
+import "./ChatContainer.css";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import { ExpandMore } from "@mui/icons-material";
+import { BiVideo } from "react-icons/bi";
 
 const ChatContainer = () => {
   return (
-    <div className='chatContainer'>
-        <div className='chatHeader'>
-            
-                <div>
-                    <ArrowBackIcon className='backbutton'/>
-                </div>
-                <div className='userTag'>
-                    <div className='userProfileIcon'><p>BC</p></div>
-                    <span className='userTitle'>Bhanu Chandar</span>
-                    <ExpandMore/>
-                </div>
-                        
-                <BiVideo className="videoIcon"/>
-            
+    <div className="chatContainer">
+      <div className="chatHeader">
+        <div>
+          <ArrowBackIcon className="backbutton" />
         </div>
-        <hr/>
-        
+        <div className="userTag">
+          <div className="userProfileIcon">
+            <p>BC</p>
+          </div>
+          <span className="userTitle">Bhanu Chandar</span>
+          <ExpandMore />
+        </div>
 
+        <BiVideo className="videoIcon" />
+      </div>
+      <hr />
+      <div className="chatBody">
+        <h1>Hello</h1>
+      </div>
+      <div className="chattyping"></div>
     </div>
-  )
-}
+  );
+};
 
-export default ChatContainer
+export default ChatContainer;

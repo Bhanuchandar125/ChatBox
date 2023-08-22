@@ -30,7 +30,7 @@
     border-style: none;
     background-color: lightcoral;
     color:white;
-    width:70px;
+    width:80px;
     border-radius: 5px;
   }
   .Login:hover {
@@ -39,6 +39,22 @@
     cursor: pointer;
     transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out; 
   }
+  .loadingLogin{
+    background-color: green;
+    cursor:progress;
+  }
   .validationerror{
     color:red
+  }
+  .circular-progress-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: transparent; 
+    backdrop-filter: blur(5px); 
   }
