@@ -57,8 +57,98 @@
   background-color: lightgray;
 }
 .chatBody {
-  padding: 20px;
+  padding: 50px;
   height: 60vh;
   background-color: lightcyan;
   overflow-y: auto;
+  display:flex;
+  flex-direction: column-reverse;
+  align-items: flex-end;
+  z-index: 10;
+}
+.messageinput {
+  z-index: 10;
+  position: fixed;
+  bottom: 0;
+  width: 100%; 
+  padding: 10px; 
+  padding-bottom: 20px;
+  background-color: #fff; 
+  border-top: 1px solid #ccc; 
+  box-shadow: 0px -1px 5px rgba(0, 0, 0, 0.1); 
+}
+.textinput{
+  width:75%;
+  border-radius: 8px;
+  border-width:0.1px ;
+  
+  height:35px
+}
+.customFileInput{
+  margin:5px;
+  border-radius: 50%;
+  height:40px;
+  width:auto;
+  padding:5px;
+  color:gray;
+  cursor:pointer;
+}
+.customFileInput:hover{
+  background-color:lightgray;
+}
+.emojibg{
+  margin:5px;
+  border-radius: 50%;
+  height:40px;
+  width:auto;
+  padding:5px;
+  color:gray;
+  cursor: pointer;
+}
+.emojibg:hover{
+  background-color:lightgray;
+}
+.emojiPickerContainer{
+  position: absolute;
+  top: -450px; 
+  right: 265px;
+ 
+  z-index: 101; 
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+  padding: 10px;
+}
+
+.sendIcon{
+  margin:5px;
+  border-radius: 50%;
+  height:40px;
+  width:auto;
+  padding:5px;
+  color:gray;
+  cursor: pointer;
+}
+.sendIcon:hover{
+  /* background-color:lightgray; */
+  color:blue;
+}
+.messagecontainer{
+  list-style: none;
+  background-color: beige;
+  padding:10%;
+  width:fit-content;
+  height:fit-content;
+  border-radius: 25%;
+  margin:15px;
+  text-align: end;
+}
+.listcontainer{
+ 
+  display: flex;
+  flex-direction: column;
+  justify-content: end;
+   align-items: end;
+
 }
