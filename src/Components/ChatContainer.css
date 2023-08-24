@@ -137,11 +137,11 @@
 .messagecontainer{
   list-style: none;
   background-color: beige;
-  padding:10%;
+  padding:10px;
   width:fit-content;
   height:fit-content;
-  border-radius: 25%;
-  margin:15px;
+  border-radius: 10px;
+  margin:10px;
   text-align: end;
 }
 .listcontainer{
@@ -151,4 +151,36 @@
   justify-content: end;
    align-items: end;
 
+}
+.editIcon{
+  color:lightgray;
+  height: 2px;
+  position: relative;
+  top:-10px;
+  right:-5px;
+  cursor: pointer;
+}
+.videoContainer{
+  position: relative;
+  right:5px;
+  height:200px;
+  width:300px;
+  list-style: none;
+  padding:10px;
+  border-radius: 20px;
+  border-top-left-radius: 30px;
+  border-bottom-left-radius: 30px;
+  margin:10px;
+  text-align: end;
+}
+.imageContainer{
+  position: relative;
+  right:5px;
+  height:200px;
+  width:300px;
+  list-style: none;
+  background-color: none; 
+  border-radius: 10px;
+  text-align: end;
+  margin:10px;
 }
