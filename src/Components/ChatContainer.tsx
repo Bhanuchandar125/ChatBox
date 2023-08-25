@@ -2,12 +2,9 @@ import React, { useEffect, useRef, useState } from "react";
 import "./ChatContainer.css";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { ExpandMore } from "@mui/icons-material";
-import { BiUpload, BiVideo } from "react-icons/bi";
-import data from "@emoji-mart/data";
-import Picker from "@emoji-mart/react";
-import EmojiEmotionsOutlinedIcon from "@mui/icons-material/EmojiEmotionsOutlined";
-import { AiOutlineSend } from "react-icons/ai";
+import {  BiVideo } from "react-icons/bi";
 import { MdOutlineModeEditOutline } from "react-icons/md";
+import MessageInputSection from "./MessageInputSection";
 
 const ChatContainer = () => {
   const [message, setMessage] = useState<any>({
@@ -18,6 +15,7 @@ const ChatContainer = () => {
   const [sentmessages, setSentMessages] = useState<any>([]);
   const [isEmojiOpen, setEmojiOpen] = useState<boolean>(false);
   const [editIndex, setEditIndex] = useState<number | null>(null);
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
 
   const handleEmojiSelect = (e: any) => {
     const emoji = e.native;
@@ -39,7 +37,10 @@ const ChatContainer = () => {
   }, []);
 
   const handleSend = () => {
-    if (message.name.trim() !== "") {
+    if (selectedFiles.length !== 0) {
+      setSentMessages([...sentmessages, ...selectedFiles]);
+      setSelectedFiles([]);
+    } else if (message.name.trim() !== "") {
       setSentMessages([...sentmessages, message]);
       setMessage({ name: "", url: "", type: "" });
     }
@@ -66,32 +67,41 @@ const ChatContainer = () => {
     e.stopPropagation();
     setEmojiOpen(!isEmojiOpen);
   };
-  const handleFileUpload = (e: any) => {
-    const file = e.target.files[0];
 
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = async () => {
-        const url = URL.createObjectURL(file);
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedFilesArray: any[] = [];
+    if (e.target.files) {
+      for (let i = 0; i < e.target.files.length; i++) {
+        const url = URL.createObjectURL(e.target.files[i]);
+        const type = e.target.files[i].type;
 
-        // Determine the type of the file (image, video, etc.)
-        let fileType = "image";
-        if (file.type.startsWith("video")) {
-          fileType = "video";
+        if (type.startsWith("image") || type.startsWith("video")) {
+          selectedFilesArray.push({ name: "", url: url, type: type });
         }
-
-        const uploadedFile = {
-          type: fileType,
-          file: url,
-        };
-
-        setSentMessages([...sentmessages, uploadedFile]);
-      };
-      reader.readAsDataURL(file);
+      }
+      setSelectedFiles([...selectedFiles, ...selectedFilesArray]);
     }
   };
 
-  console.log("isEmojiOpen", isEmojiOpen);
+  const handleFileDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+
+    const selectedFilesArray: any[] = [];
+    const files = e.dataTransfer.files;
+
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      const url = URL.createObjectURL(file);
+      const type = file.type;
+
+      if (type.startsWith("image") || type.startsWith("video")) {
+        selectedFilesArray.push({ name: "", url: url, type: type });
+      }
+    }
+
+    setSelectedFiles([...selectedFiles, ...selectedFilesArray]);
+  };
+
   return (
     <div className="chatContainer">
       <div className="chatHeader">
@@ -112,21 +122,21 @@ const ChatContainer = () => {
       <div className="chatBody">
         <ul className="listcontainer">
           {sentmessages.map((each: any, index: number) => {
-            if (each.type === "video") {
+            if (each.type.startsWith("video")) {
               return (
                 <li className="videoContainer" key={index}>
                   <video controls className="videoContainer">
-                    <source src={each.file} type="video/mp4" />
+                    <source src={each.url} type="video/mp4" />
                     Your browser does not support the video tag.
                   </video>
                 </li>
               );
-            } else if (each.type === "image") {
+            } else if (each.type.startsWith("image")) {
               return (
                 <li className="imageContainer" key={index}>
                   <img
-                    src={each.file}
-                    alt="Uploaded"
+                    src={each.url}
+                    alt={`Uploaded ${index}`}
                     className="imageContainer"
                   />
                 </li>
@@ -144,42 +154,25 @@ const ChatContainer = () => {
                 </li>
               );
             }
-          })}
+          })}{" "}
         </ul>
       </div>
 
       <div className="messageinput">
-        <input
-          type="text"
-          className="textinput"
-          onChange={handlechangeMessage}
-          placeholder="Type Message..."
-          value={message.name}
-        />
-        <label htmlFor="fileInput">
-          <BiUpload className="customFileInput" />
-        </label>
-        <input
-          type="file"
-          id="fileInput"
-          onChange={handleFileUpload}
-          style={{ display: "none" }}
-        />
-        <label className="emojibg" onClick={handleEmojiIconClick}>
-          <EmojiEmotionsOutlinedIcon />
-        </label>
-        {isEmojiOpen && (
-          <div className="emojiPickerContainer" ref={emojiPickerRef}>
-            <Picker data={data} onEmojiSelect={handleEmojiSelect} />
-          </div>
-        )}
-        <label onClick={editIndex !== null ? handleEditSave : handleSend}>
-          {/* <label onClick={handleSend}> */}
-          <AiOutlineSend className="sendIcon" />
-        </label>
+        
+          <MessageInputSection 
+          handleEmojiSelect={handleEmojiSelect}
+          handleSend={handleSend}
+          handlechangeMessage={handlechangeMessage}
+          handleEditSave={handleEditSave}
+          handleEmojiIconClick={handleEmojiIconClick}
+          handleFileSelect={handleFileSelect}
+          handleFileDrop={handleFileDrop}/>
       </div>
     </div>
   );
 };
 
 export default ChatContainer;
+
+// Inside the chatBody rendering

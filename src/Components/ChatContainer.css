@@ -184,3 +184,13 @@
   text-align: end;
   margin:10px;
 }
+.selectedFilesContainer{
+  display: flex;
+  height:100px;
+  width:100%
+}
+.selectedImage{
+  max-height:100px;
+  max-width:cover;
+  padding:5px
+}
