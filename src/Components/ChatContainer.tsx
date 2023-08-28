@@ -1,40 +1,25 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useState } from "react";
 import "./ChatContainer.css";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { ExpandMore } from "@mui/icons-material";
-import {  BiVideo } from "react-icons/bi";
+import { BiVideo } from "react-icons/bi";
 import { MdOutlineModeEditOutline } from "react-icons/md";
 import MessageInputSection from "./MessageInputSection";
+import { selectedFilesArray } from "./Context";
+import { sentMessagesArray } from "./Context";
+import { MessageBox } from "react-chat-elements";
+import "react-chat-elements/dist/main.css";
+import { ContextMenu, MenuItem } from "react-contextmenu";
+
+import CustomContextMenu from "./CustomCOntextMenu";
 
 const ChatContainer = () => {
-  const [message, setMessage] = useState<any>({
-    name: "",
-    url: "",
-    type: "",
-  });
-  const [sentmessages, setSentMessages] = useState<any>([]);
+  const [message, setMessage] = useState<any>({ name: "", url: "", type: "" });
+
   const [isEmojiOpen, setEmojiOpen] = useState<boolean>(false);
   const [editIndex, setEditIndex] = useState<number | null>(null);
-  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
-
-  const handleEmojiSelect = (e: any) => {
-    const emoji = e.native;
-    setMessage({ ...message, name: message.name + emoji });
-  };
-  const emojiPickerRef = useRef<HTMLDivElement | null>(null);
-
-  const handleClickOutside = (e: any) => {
-    if (emojiPickerRef.current && !emojiPickerRef.current.contains(e.target)) {
-      setEmojiOpen(false);
-    }
-  };
-  useEffect(() => {
-    document.addEventListener("click", handleClickOutside);
-
-    return () => {
-      document.removeEventListener("click", handleClickOutside);
-    };
-  }, []);
+  const { selectedFiles, setSelectedFiles } = useContext(selectedFilesArray);
+  const { sentmessages, setSentMessages } = useContext(sentMessagesArray);
 
   const handleSend = () => {
     if (selectedFiles.length !== 0) {
@@ -62,10 +47,6 @@ const ChatContainer = () => {
       setEditIndex(null);
       setMessage({ name: "", url: "", type: "" });
     }
-  };
-  const handleEmojiIconClick = (e: React.MouseEvent<HTMLLabelElement>) => {
-    e.stopPropagation();
-    setEmojiOpen(!isEmojiOpen);
   };
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -121,58 +102,75 @@ const ChatContainer = () => {
       <hr />
       <div className="chatBody">
         <ul className="listcontainer">
-          {sentmessages.map((each: any, index: number) => {
-            if (each.type.startsWith("video")) {
-              return (
-                <li className="videoContainer" key={index}>
-                  <video controls className="videoContainer">
-                    <source src={each.url} type="video/mp4" />
-                    Your browser does not support the video tag.
-                  </video>
-                </li>
-              );
-            } else if (each.type.startsWith("image")) {
-              return (
-                <li className="imageContainer" key={index}>
-                  <img
-                    src={each.url}
-                    alt={`Uploaded ${index}`}
-                    className="imageContainer"
-                  />
-                </li>
-              );
-            } else {
-              return (
-                <li className="messagecontainer" key={index}>
-                  {each.name}
-                  <span
-                    className="editIcon"
-                    onClick={() => handleEdit(index, each)}
-                  >
-                    <MdOutlineModeEditOutline />
-                  </span>
-                </li>
-              );
-            }
-          })}{" "}
+          {sentmessages &&
+            sentmessages.map((each: any, index: number) => {
+              if (each.type.startsWith("video")) {
+                return (
+                  <li className="videoContainer" key={index}>
+                    <video controls className="videoContainer">
+                      <source src={each.url} type="video/mp4" />
+                      Your browser does not support the video tag.
+                    </video>
+                  </li>
+                );
+              } else if (each.type.startsWith("image")) {
+                return (
+                  <li className="imageContainer" key={index}>
+                    <img
+                      src={each.url}
+                      alt={`Uploaded ${index}`}
+                      className="imageContainer"
+                    />
+                  </li>
+                );
+              } else {
+                return (
+                  // <li className="messagecontainer" key={index}>
+                  //   <span>{each.name}</span>
+                  //   <span
+                  //     className="editIcon"
+                  //     onClick={() => handleEdit(index, each)}
+                  //   >
+                  //     <MdOutlineModeEditOutline />
+                  //   </span>
+                  // </li>
+                  
+                    <MessageBox
+                      key={index}
+                      position="right"
+                      title="Bhanu"
+                      type="text"
+                      text={each.name}
+                      date={new Date()}
+                      replyButton={true}
+                      
+                      avatar={"https://i.ibb.co/XVXMd2q/DSC05462.jpg"} // Sender's avatar
+                    />
+                    
+                  
+                );
+              }
+            })}{" "}
         </ul>
       </div>
 
       <div className="messageinput">
-        
-          <MessageInputSection 
-          handleEmojiSelect={handleEmojiSelect}
+        <MessageInputSection
+          setMessage={setMessage}
+          message={message}
+          isEmojiOPen={isEmojiOpen}
+          setEmojiOpen={setEmojiOpen}
+          editIndex={editIndex}
+          setEditIndex={setEditIndex}
           handleSend={handleSend}
           handlechangeMessage={handlechangeMessage}
           handleEditSave={handleEditSave}
-          handleEmojiIconClick={handleEmojiIconClick}
           handleFileSelect={handleFileSelect}
-          handleFileDrop={handleFileDrop}/>
+          handleFileDrop={handleFileDrop}
+        />
       </div>
     </div>
   );
 };
 
 export default ChatContainer;
-
-// Inside the chatBody rendering

@@ -4,7 +4,7 @@ import Header from '../Components/Header'
 
 const Home = () => {
   const user = localStorage.getItem("user")
-  console.log("user", user)
+
   return (
     <div className='homeBg'>
         <Header/>
