@@ -1,93 +1,122 @@
 [
-    {
+  {
       "name": "Alice Johnson",
       "email": "alice@example.com",
       "contact": "123-456-7890",
-      "profile_image": "https://randomuser.me/api/portraits/women/1.jpg"
-    },
-    {
+      "profile_image": "https://randomuser.me/api/portraits/women/1.jpg",
+      "recent_message": "Hey there! How's it going?",
+      "last_message_Date": "2023-08-28"
+  },
+  {
       "name": "Bob Smith",
       "email": "bob@example.com",
       "contact": "987-654-3210",
-      "profile_image": "https://randomuser.me/api/portraits/men/2.jpg"
-    },
-    {
+      "profile_image": "https://randomuser.me/api/portraits/men/2.jpg",
+      "recent_message": "Sure thing! Let's meet tomorrow.",
+      "last_message_Date": "2023-08-27"
+  },
+  {
       "name": "Ella Williams",
       "email": "ella@example.com",
       "contact": "555-123-4567",
-      "profile_image": "https://randomuser.me/api/portraits/women/3.jpg"
-    },
-    {
+      "profile_image": "https://randomuser.me/api/portraits/women/3.jpg",
+      "recent_message": "Thanks! I appreciate your help.",
+      "last_message_Date": "2023-08-28"
+  },
+  {
       "name": "David Brown",
       "email": "david@example.com",
       "contact": "789-012-3456",
-      "profile_image": "https://randomuser.me/api/portraits/men/4.jpg"
-    },
-    {
+      "profile_image": "https://randomuser.me/api/portraits/men/4.jpg",
+      "recent_message": "Looking forward to the weekend!",
+      "last_message_Date": "2023-08-27"
+  },
+  {
       "name": "Sophia Martinez",
       "email": "sophia@example.com",
       "contact": "234-567-8901",
-      "profile_image": "https://randomuser.me/api/portraits/women/5.jpg"
-    },
-    {
+      "profile_image": "https://randomuser.me/api/portraits/women/5.jpg",
+      "recent_message": "See you there!",
+      "last_message_Date": "2023-08-28"
+  },
+  {
       "name": "James Johnson",
       "email": "james@example.com",
       "contact": "876-543-2109",
-      "profile_image": "https://randomuser.me/api/portraits/men/6.jpg"
-    },
-    {
+      "profile_image": "https://randomuser.me/api/portraits/men/6.jpg",
+      "recent_message": "No problem, take your time.",
+      "last_message_Date": "2023-08-26"
+  },
+  {
       "name": "Olivia Davis",
       "email": "olivia@example.com",
       "contact": "345-678-9012",
-      "profile_image": "https://randomuser.me/api/portraits/women/7.jpg"
-    },
-    {
+      "profile_image": "https://randomuser.me/api/portraits/women/7.jpg",
+      "recent_message": "I'm glad you liked it!",
+      "last_message_Date": "2023-08-28"
+  },
+  {
       "name": "Daniel Anderson",
       "email": "daniel@example.com",
       "contact": "654-321-0987",
-      "profile_image": "https://randomuser.me/api/portraits/men/8.jpg"
-    },
-    {
+      "profile_image": "https://randomuser.me/api/portraits/men/8.jpg",
+      "recent_message": "Sure, I can help with that.",
+      "last_message_Date": "2023-08-27"
+  },
+  {
       "name": "Ava Thomas",
       "email": "ava@example.com",
       "contact": "876-543-2109",
-      "profile_image": "https://randomuser.me/api/portraits/women/9.jpg"
-    },
-    {
+      "profile_image": "https://randomuser.me/api/portraits/women/9.jpg",
+      "recent_message": "I'll be there on time.",
+      "last_message_Date": "2023-08-28"
+  },
+  {
       "name": "Michael Wilson",
       "email": "michael@example.com",
       "contact": "432-109-8765",
-      "profile_image": "https://randomuser.me/api/portraits/men/10.jpg"
-    },
-    {
+      "profile_image": "https://randomuser.me/api/portraits/men/10.jpg",
+      "recent_message": "Thanks for the update.",
+      "last_message_Date": "2023-08-27"
+  },
+  {
       "name": "Emma White",
       "email": "emma@example.com",
       "contact": "123-456-7890",
-      "profile_image": "https://randomuser.me/api/portraits/women/11.jpg"
-    },
-    {
+      "profile_image": "https://randomuser.me/api/portraits/women/11.jpg",
+      "recent_message": "Can we reschedule the meeting?",
+      "last_message_Date": "2023-08-26"
+  },
+  {
       "name": "William Taylor",
       "email": "william@example.com",
       "contact": "987-654-3210",
-      "profile_image": "https://randomuser.me/api/portraits/men/12.jpg"
-    },
-    {
+      "profile_image": "https://randomuser.me/api/portraits/men/12.jpg",
+      "recent_message": "I think it's a great idea!",
+      "last_message_Date": "2023-08-27"
+  },
+  {
       "name": "Mia Harris",
       "email": "mia@example.com",
       "contact": "555-123-4567",
-      "profile_image": "https://randomuser.me/api/portraits/women/13.jpg"
-    },
-    {
+      "profile_image": "https://randomuser.me/api/portraits/women/13.jpg",
+      "recent_message": "Let's meet for coffee.",
+      "last_message_Date": "2023-08-28"
+  },
+  {
       "name": "Alexander Jackson",
       "email": "alexander@example.com",
       "contact": "789-012-3456",
-      "profile_image": "https://randomuser.me/api/portraits/men/14.jpg"
-    },
-    {
+      "profile_image": "https://randomuser.me/api/portraits/men/14.jpg",
+      "recent_message": "Have a great day!",
+      "last_message_Date": "2023-08-27"
+  },
+  {
       "name": "Isabella Clark",
       "email": "isabella@example.com",
       "contact": "234-567-8901",
-      "profile_image": "https://randomuser.me/api/portraits/women/15.jpg"
-    }
-  ]
-  
+      "profile_image": "https://randomuser.me/api/portraits/women/15.jpg",
+      "recent_message": "I'll see you later.",
+      "last_message_Date": "2023-08-28"
+  }
+]

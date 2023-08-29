@@ -11,6 +11,7 @@ import { BsTypeBold } from "react-icons/bs";
 import { PiTextUnderlineBold } from "react-icons/pi";
 import { DiCode } from "react-icons/di";
 
+
 const MessageInputSection = (props: any) => {
   const { selectedFiles, setSelectedFiles } = useContext(selectedFilesArray);
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -97,7 +98,7 @@ const MessageInputSection = (props: any) => {
         <div className={isInputOpen ? "texteditorOpen" : null}>
           {isInputOpen ? (
             <div className="textEditor">
-              <label onClick={()=>setIsbold(!isbold)}>
+              <label onClick={handleBold}>
                 <BsTypeBold className={`textEditorIcons ${isbold?"textEditorIconsactive":""}`} />
               </label>
               <label>

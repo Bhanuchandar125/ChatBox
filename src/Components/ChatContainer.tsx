@@ -7,14 +7,12 @@ import { MdOutlineModeEditOutline } from "react-icons/md";
 import MessageInputSection from "./MessageInputSection";
 import { selectedFilesArray } from "./Context";
 import { sentMessagesArray } from "./Context";
-import { MessageBox } from "react-chat-elements";
+import { Avatar, MessageBox } from "react-chat-elements";
 import "react-chat-elements/dist/main.css";
-import TestMessageInputSection from "./TestMessageInputSection";
-// import { ContextMenu, MenuItem } from "react-contextmenu";
 
-// import CustomContextMenu from "./CustomCOntextMenu";
+import MessageOptionsMenu from "./MessageMenu";
 
-const ChatContainer = () => {
+const ChatContainer = (props: any) => {
   const [message, setMessage] = useState<any>({ name: "", url: "", type: "" });
   const [editIndex, setEditIndex] = useState<number | null>(null);
   const { selectedFiles, setSelectedFiles } = useContext(selectedFilesArray);
@@ -89,10 +87,16 @@ const ChatContainer = () => {
           <ArrowBackIcon className="backbutton" />
         </div>
         <div className="userTag">
-          <div className="userProfileIcon">
-            <p>BC</p>
-          </div>
-          <span className="userTitle">Bhanu Chandar</span>
+          
+            <Avatar
+              src={props.user.profile_image}
+              alt="avatar"
+              size="xlarge"
+              className="userProfileIcon"
+            />
+         
+
+          <span className="userTitle">{props.user.name}</span>
           <ExpandMore />
         </div>
 
@@ -110,6 +114,7 @@ const ChatContainer = () => {
                       <source src={each.url} type="video/mp4" />
                       Your browser does not support the video tag.
                     </video>
+                    <MessageOptionsMenu />
                   </li>
                 );
               } else if (each.type.startsWith("image")) {
@@ -120,6 +125,7 @@ const ChatContainer = () => {
                       alt={`Uploaded ${index}`}
                       className="imageContainer"
                     />
+                    <MessageOptionsMenu />
                   </li>
                 );
               } else {
@@ -133,20 +139,19 @@ const ChatContainer = () => {
                   //     <MdOutlineModeEditOutline />
                   //   </span>
                   // </li>
-                  
+                  <>
                     <MessageBox
                       key={index}
                       position="right"
-                      title="Bhanu"
+                      title="Liam Johnson"
                       type="text"
                       text={each.name}
                       date={new Date()}
-                      replyButton={true}
-                      
-                      avatar={"https://i.ibb.co/XVXMd2q/DSC05462.jpg"} // Sender's avatar
+                      replyButton={false}
+                      avatar={"https://randomuser.me/api/portraits/men/16.jpg"} // Sender's avatar
                     />
-                    
-                  
+                    <MessageOptionsMenu />
+                  </>
                 );
               }
             })}{" "}
@@ -157,7 +162,6 @@ const ChatContainer = () => {
         <MessageInputSection
           setMessage={setMessage}
           message={message}
-          
           editIndex={editIndex}
           setEditIndex={setEditIndex}
           handleSend={handleSend}

@@ -33,15 +33,16 @@
   height: 88%;
 }
 .mainSection {
-  width: 90%;
+  width: 80%;
 }
 .sideSection {
   background-color: #f4f3f8;
-  width: 10%;
+  width: 20%;
   display: flex;
   flex-direction: column;
   padding: 20px;
   height: 88vh;
+  
 }
 
 .sideSection_icon {
@@ -63,6 +64,9 @@
 .sideSection_item:hover {
   transform: scale(1.2);
   color: green;
+}
+.sideSection_item_clicked{
+  overflow-y: scroll;
 }
 
 .active {

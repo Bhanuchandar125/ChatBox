@@ -1,24 +1,51 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { BsChatRightText } from 'react-icons/bs';
 import { GoPeople } from 'react-icons/go';
 import { BiVideoPlus } from 'react-icons/bi';
 import ChatContainer from './ChatContainer';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-
+import { ChatList } from 'react-chat-elements';
+import  data from '../assets/UserData.json'
 
 
 const Body = () => {
+  console.log(data)
+  const [chatClicked, setChatClicked] = useState<boolean>(false)
+  const [openChat, setOpenChat] = useState({})
+
+  const handleopenchat = (chat:any)=>{
+    setOpenChat(chat)
+  }
   return (
     <div>
       <div className='appContainer'>
         <div className='sideSection'>
-          <div className="sideSection_item">
+          <div className={chatClicked?"sideSection_item_clicked":"sideSection_item"} onClick={()=>setChatClicked(!chatClicked)}>
             <BsChatRightText className="sideSection_icon" /> 
             <span className='sideSection_text'>Chat</span><ExpandMoreIcon className="expandmore"/>
-            
+            {chatClicked ? (
+            data.map((each: any, index:number) => (
+              <ChatList
+                key={index} 
+                className='chat-list'
+                dataSource={[
+                  {
+                    avatar: each.profile_image,
+                    alt: 'kursat_avatar',
+                    title: each.name,
+                    subtitle: each.recent_message,
+                    date: each.last_message_Date,
+                    unread: 3,
+                  }
+                  
+                ]}
+                onClick={()=>handleopenchat(each)}
+              />
+            ))
+          ) : null}
           </div>
+          
           <div className="sideSection_item">
-            
             <GoPeople className="sideSection_icon" />
             <span className='sideSection_text'>spaces</span>
             
@@ -30,7 +57,8 @@ const Body = () => {
           </div>
         </div>
         <div className='mainSection'>
-            <ChatContainer/>
+            <ChatContainer
+            user={openChat}/>
         </div>
       </div>
     </div>
