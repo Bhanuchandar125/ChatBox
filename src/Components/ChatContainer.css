@@ -78,14 +78,18 @@
   box-shadow: 0px -1px 5px rgba(0, 0, 0, 0.1); 
 }
 .textinput{
-  width:75%;
-  border-radius: 8px;
-  border-width:0.1px ;
+  width: 75%;
+    border-style: none;
+    height: 25px;
+    padding: 7px;
+    margin-left: 15px;
+}
+.textinput:focus {
+  outline: none; 
   
-  height:35px
 }
 .customFileInput{
-  margin:5px;
+  margin:1px;
   border-radius: 50%;
   height:40px;
   width:auto;
@@ -193,4 +197,58 @@
   max-height:100px;
   max-width:cover;
   padding:5px
+}
+.inputsection{
+  border-color: gray;
+  border-width: 1px;
+  border-radius: 15px;
+  border-style: solid;
+  height:43px;
+  width:90%;
+  padding:5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.inputOpen{
+  border-color: gray;
+  border-width: 1px;
+  border-radius: 15px;
+  border-style: solid;
+  height:100px;
+  width:90%;
+  padding: 5px;
+  /* padding-top:10px; */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.texteditorOpen{
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  height:43px;
+}
+.textEditorIcons{
+  margin-bottom:5px;
+  border-radius: 50%;
+  height:25px;
+  width:auto;
+  padding:3px;
+  color:gray;
+  cursor:pointer;
+
+}
+.textEditorIcons:hover{
+  background-color:lightgray;
+}
+.textEditorIconsactive{
+  color:black;
+}
+.textEditor{
+  margin:0px;
+  padding:0px
+}
+.boldTextInput{
+  font-weight: bold;
 }

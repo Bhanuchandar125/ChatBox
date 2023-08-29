@@ -9,14 +9,13 @@ import { selectedFilesArray } from "./Context";
 import { sentMessagesArray } from "./Context";
 import { MessageBox } from "react-chat-elements";
 import "react-chat-elements/dist/main.css";
-import { ContextMenu, MenuItem } from "react-contextmenu";
+import TestMessageInputSection from "./TestMessageInputSection";
+// import { ContextMenu, MenuItem } from "react-contextmenu";
 
-import CustomContextMenu from "./CustomCOntextMenu";
+// import CustomContextMenu from "./CustomCOntextMenu";
 
 const ChatContainer = () => {
   const [message, setMessage] = useState<any>({ name: "", url: "", type: "" });
-
-  const [isEmojiOpen, setEmojiOpen] = useState<boolean>(false);
   const [editIndex, setEditIndex] = useState<number | null>(null);
   const { selectedFiles, setSelectedFiles } = useContext(selectedFilesArray);
   const { sentmessages, setSentMessages } = useContext(sentMessagesArray);
@@ -158,8 +157,7 @@ const ChatContainer = () => {
         <MessageInputSection
           setMessage={setMessage}
           message={message}
-          isEmojiOPen={isEmojiOpen}
-          setEmojiOpen={setEmojiOpen}
+          
           editIndex={editIndex}
           setEditIndex={setEditIndex}
           handleSend={handleSend}
@@ -168,6 +166,18 @@ const ChatContainer = () => {
           handleFileSelect={handleFileSelect}
           handleFileDrop={handleFileDrop}
         />
+        {/* <TestMessageInputSection
+          setMessage={setMessage}
+          message={message}
+          
+          editIndex={editIndex}
+          setEditIndex={setEditIndex}
+          handleSend={handleSend}
+          handlechangeMessage={handlechangeMessage}
+          handleEditSave={handleEditSave}
+          handleFileSelect={handleFileSelect}
+          handleFileDrop={handleFileDrop}
+        /> */}
       </div>
     </div>
   );

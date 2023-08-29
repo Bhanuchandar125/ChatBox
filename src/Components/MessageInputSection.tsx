@@ -5,22 +5,27 @@ import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
 import "./ChatContainer.css";
 import { selectedFilesArray } from "./Context";
-import { useContext, useEffect, useRef } from "react";
-
+import { useContext, useEffect, useRef, useState } from "react";
+import { MdOutlineFormatItalic, MdTextFormat } from "react-icons/md";
+import { BsTypeBold } from "react-icons/bs";
+import { PiTextUnderlineBold } from "react-icons/pi";
+import { DiCode } from "react-icons/di";
 
 const MessageInputSection = (props: any) => {
   const { selectedFiles, setSelectedFiles } = useContext(selectedFilesArray);
-  console.log("props", props);
-
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [isInputOpen, setIsInputOpen] = useState<boolean>(false);
+  const [isbold, setIsbold] = useState<boolean>(false)
   const handleEmojiSelect = (e: any) => {
     const emoji = e.native;
     props.setMessage({ ...props.message, name: props.message.name + emoji });
   };
+
   const emojiPickerRef = useRef<HTMLDivElement | null>(null);
 
   const handleClickOutside = (e: any) => {
     if (emojiPickerRef.current && !emojiPickerRef.current.contains(e.target)) {
-      props.setEmojiOpen(false);
+      setIsOpen(false);
     }
   };
   useEffect(() => {
@@ -32,8 +37,22 @@ const MessageInputSection = (props: any) => {
   }, []);
   const handleEmojiIconClick = (e: React.MouseEvent<HTMLLabelElement>) => {
     e.stopPropagation();
-    props.setEmojiOpen(!props.isEmojiOpen);
+    setIsOpen(!isOpen);
   };
+
+  const handleEnterKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      if (props.editIndex !== null) {
+        props.handleEditSave();
+      } else {
+        props.handleSend();
+      }
+    }
+  };
+  const handleBold=()=>{
+
+  }
   return (
     <div>
       {selectedFiles.length !== 0 ? (
@@ -51,7 +70,7 @@ const MessageInputSection = (props: any) => {
               );
             } else if (file.type.startsWith("video")) {
               return (
-                <video controls className="selectedImage" key ={index}>
+                <video controls className="selectedImage" key={index}>
                   <source
                     src={file.url}
                     type="video/mp4"
@@ -64,41 +83,68 @@ const MessageInputSection = (props: any) => {
           })}
         </div>
       ) : null}
-
-      <input
-        type="text"
-        className="textinput"
-        onChange={props.handlechangeMessage}
-        placeholder="Type Message..."
-        value={props.message?.name}
-        onDragOver={(e) => e.preventDefault()}
-        onDrop={props.handleFileDrop}
-      />
-      <label htmlFor="fileInput">
-        <BiUpload className="customFileInput" />
-      </label>
-      <input
-        type="file"
-        id="fileInput"
-        onChange={props.handleFileSelect}
-        multiple
-        style={{ display: "none" }}
-      />
-      <label className="emojibg" onClick={handleEmojiIconClick}>
-        <EmojiEmotionsOutlinedIcon />
-      </label>
-      {props.isEmojiOpen && (
-        <div className="emojiPickerContainer" ref={emojiPickerRef}>
-          <Picker data={data} onEmojiSelect={handleEmojiSelect} />
+      <div className={isInputOpen ? "inputOpen" : "inputsection"}>
+        <input
+          type="text"
+          className={`textinput ${isbold?"boldTextInput":""}`}
+          onChange={props.handlechangeMessage}
+          placeholder="Type Message..."
+          value={props.message?.name}
+          onDragOver={(e) => e.preventDefault()}
+          onDrop={props.handleFileDrop}
+          onKeyDown={handleEnterKeyPress}
+        />
+        <div className={isInputOpen ? "texteditorOpen" : null}>
+          {isInputOpen ? (
+            <div className="textEditor">
+              <label onClick={()=>setIsbold(!isbold)}>
+                <BsTypeBold className={`textEditorIcons ${isbold?"textEditorIconsactive":""}`} />
+              </label>
+              <label>
+                <MdOutlineFormatItalic className="textEditorIcons" />
+              </label>
+              <label>
+                <PiTextUnderlineBold className="textEditorIcons" />
+              </label>
+              <label>
+                <DiCode className="textEditorIcons" />
+              </label>
+            </div>
+          ) : null}
+          <div>
+            <label onClick={() => setIsInputOpen(!isInputOpen)}>
+              <MdTextFormat className="customFileInput" />
+            </label>
+            <label htmlFor="fileInput">
+              <BiUpload className="customFileInput" />
+            </label>
+            <input
+              type="file"
+              id="fileInput"
+              onChange={props.handleFileSelect}
+              multiple
+              style={{ display: "none" }}
+            />
+            <label className="emojibg" onClick={handleEmojiIconClick}>
+              <EmojiEmotionsOutlinedIcon />
+            </label>
+            {isOpen && (
+              <div className="emojiPickerContainer" ref={emojiPickerRef}>
+                <Picker data={data} onEmojiSelect={handleEmojiSelect} />
+              </div>
+            )}
+            <label
+              onClick={
+                props.editIndex !== null
+                  ? props.handleEditSave
+                  : props.handleSend
+              }
+            >
+              <AiOutlineSend className="sendIcon" />
+            </label>
+          </div>
         </div>
-      )}
-      <label
-        onClick={
-          props.editIndex !== null ? props.handleEditSave : props.handleSend
-        }
-      >
-        <AiOutlineSend className="sendIcon" />
-      </label>
+      </div>
     </div>
   );
 };
