@@ -22,7 +22,9 @@ function Header() {
     navigate("/login");
   };
   return (
-    <Navbar expand="lg" className=" navbarBg ">
+    <div className="container-fluid">
+      <div className="row">
+      <Navbar expand="lg" className=" navbarBg col-xs-12">
       <Container fluid>
         <Navbar.Brand href="#">
           <img src="https://ssl.gstatic.com/ui/v1/icons/mail/rfr/logo_chat_default_1x.png" />
@@ -66,6 +68,9 @@ function Header() {
         </Navbar.Collapse>
       </Container>
     </Navbar>
+      </div>
+    </div>
+    
   );
 }
 

@@ -161,18 +161,7 @@ const ChatContainer = (props: any) => {
           handleFileSelect={handleFileSelect}
           handleFileDrop={handleFileDrop}
         />
-        {/* <TestMessageInputSection
-          setMessage={setMessage}
-          message={message}
-          
-          editIndex={editIndex}
-          setEditIndex={setEditIndex}
-          handleSend={handleSend}
-          handlechangeMessage={handlechangeMessage}
-          handleEditSave={handleEditSave}
-          handleFileSelect={handleFileSelect}
-          handleFileDrop={handleFileDrop}
-        /> */}
+        
       </div>
     </div>
   );

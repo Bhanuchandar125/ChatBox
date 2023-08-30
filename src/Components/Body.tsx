@@ -8,6 +8,7 @@ import { ChatList } from 'react-chat-elements';
 import  data from '../assets/UserData.json';
 import SimpleBar from 'simplebar-react';
 import 'simplebar-react/dist/simplebar.min.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 
 const Body = () => {
@@ -20,9 +21,10 @@ const Body = () => {
   }
   const scrollableNodeRef = React.createRef();
   return (
-    <div>
-      <div className='appContainer'>
-        <div className='sideSection'>
+    <div className='container-fluid'>
+      <div className='row'>
+      <div className='appContainer  '>
+        <div className='col-md-3  sideSection '>
           <div className={chatClicked?"sideSection_item_clicked":"sideSection_item"} onClick={()=>setChatClicked(!chatClicked)}>
             <BsChatRightText className="sideSection_icon" /> 
             <span className='sideSection_text'>Chat</span><ExpandMoreIcon className="expandmore"/>
@@ -61,10 +63,11 @@ const Body = () => {
             
           </div>
         </div>
-        <div className='mainSection'>
+        <div className=' col-md-9 mainSection '>
             <ChatContainer
             user={openChat}/>
         </div>
+      </div>
       </div>
     </div>
   );
