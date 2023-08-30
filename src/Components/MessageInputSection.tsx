@@ -10,9 +10,13 @@ import { MdOutlineFormatItalic, MdTextFormat } from "react-icons/md";
 import { BsTypeBold } from "react-icons/bs";
 import { PiTextUnderlineBold } from "react-icons/pi";
 import { DiCode } from "react-icons/di";
+import { useSelector } from 'react-redux';
+
 
 
 const MessageInputSection = (props: any) => {
+  const menuMessages = useSelector((state: any) => state.ChatSlice.ReplayState);
+
   const { selectedFiles, setSelectedFiles } = useContext(selectedFilesArray);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [isInputOpen, setIsInputOpen] = useState<boolean>(false);
@@ -21,7 +25,7 @@ const MessageInputSection = (props: any) => {
     const emoji = e.native;
     props.setMessage({ ...props.message, name: props.message.name + emoji });
   };
-
+  console.log("menuMessages", menuMessages)
   const emojiPickerRef = useRef<HTMLDivElement | null>(null);
 
   const handleClickOutside = (e: any) => {
@@ -94,6 +98,7 @@ const MessageInputSection = (props: any) => {
           onDragOver={(e) => e.preventDefault()}
           onDrop={props.handleFileDrop}
           onKeyDown={handleEnterKeyPress}
+          
         />
         <div className={isInputOpen ? "texteditorOpen" : null}>
           {isInputOpen ? (

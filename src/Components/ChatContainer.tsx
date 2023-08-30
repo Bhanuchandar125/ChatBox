@@ -9,7 +9,6 @@ import { selectedFilesArray } from "./Context";
 import { sentMessagesArray } from "./Context";
 import { Avatar, MessageBox } from "react-chat-elements";
 import "react-chat-elements/dist/main.css";
-
 import MessageOptionsMenu from "./MessageMenu";
 
 const ChatContainer = (props: any) => {
@@ -87,16 +86,14 @@ const ChatContainer = (props: any) => {
           <ArrowBackIcon className="backbutton" />
         </div>
         <div className="userTag">
-          
+       
             <Avatar
               src={props.user.profile_image}
               alt="avatar"
               size="xlarge"
               className="userProfileIcon"
-            />
-         
-
-          <span className="userTitle">{props.user.name}</span>
+            />     
+         <span className="userTitle">{props.user.name}</span>
           <ExpandMore />
         </div>
 
@@ -130,15 +127,7 @@ const ChatContainer = (props: any) => {
                 );
               } else {
                 return (
-                  // <li className="messagecontainer" key={index}>
-                  //   <span>{each.name}</span>
-                  //   <span
-                  //     className="editIcon"
-                  //     onClick={() => handleEdit(index, each)}
-                  //   >
-                  //     <MdOutlineModeEditOutline />
-                  //   </span>
-                  // </li>
+                  
                   <>
                     <MessageBox
                       key={index}
@@ -148,9 +137,11 @@ const ChatContainer = (props: any) => {
                       text={each.name}
                       date={new Date()}
                       replyButton={false}
-                      avatar={"https://randomuser.me/api/portraits/men/16.jpg"} // Sender's avatar
+                      avatar={"https://randomuser.me/api/portraits/men/16.jpg"} 
                     />
-                    <MessageOptionsMenu />
+                    <MessageOptionsMenu
+                    Message={each.name}
+                    id={index} />
                   </>
                 );
               }

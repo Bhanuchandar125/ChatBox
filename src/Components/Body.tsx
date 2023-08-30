@@ -5,17 +5,20 @@ import { BiVideoPlus } from 'react-icons/bi';
 import ChatContainer from './ChatContainer';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { ChatList } from 'react-chat-elements';
-import  data from '../assets/UserData.json'
+import  data from '../assets/UserData.json';
+import SimpleBar from 'simplebar-react';
+import 'simplebar-react/dist/simplebar.min.css';
 
 
 const Body = () => {
-  console.log(data)
+ 
   const [chatClicked, setChatClicked] = useState<boolean>(false)
   const [openChat, setOpenChat] = useState({})
 
   const handleopenchat = (chat:any)=>{
-    setOpenChat(chat)
+    setOpenChat(chat) 
   }
+  const scrollableNodeRef = React.createRef();
   return (
     <div>
       <div className='appContainer'>
@@ -25,6 +28,7 @@ const Body = () => {
             <span className='sideSection_text'>Chat</span><ExpandMoreIcon className="expandmore"/>
             {chatClicked ? (
             data.map((each: any, index:number) => (
+              
               <ChatList
                 key={index} 
                 className='chat-list'
@@ -41,6 +45,7 @@ const Body = () => {
                 ]}
                 onClick={()=>handleopenchat(each)}
               />
+              
             ))
           ) : null}
           </div>

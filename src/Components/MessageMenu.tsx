@@ -5,9 +5,13 @@ import MenuItem from "@mui/material/MenuItem";
 import { Stack } from "@mui/material";
 import { messageMenu } from "../assets/msgmenu";
 import { PiDotsThreeVertical } from "react-icons/pi";
+import {useDispatch} from 'react-redux';
+import {Replay, Edit, Forward, Delete } from "../ReduxToolkit/ChatSlice";
 
 
-export default function MessageOptionsMenu() {
+export default function MessageOptionsMenu(props:any) {
+const dispatch = useDispatch()
+
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -16,6 +20,22 @@ export default function MessageOptionsMenu() {
   const handleClose = () => {
     setAnchorEl(null);
   };
+  const actionMap:any = {
+    Replay: Replay,
+    Edit: Edit,
+    Forward: Forward,
+    Delete: Delete
+  };
+
+  
+const handleMenu =(el:any)=>{
+  const actionCreator  = actionMap[el.title];
+  dispatch(actionCreator({
+    Message: props.Message,
+    Id:props.id,
+    type: el.title
+  }))
+}
 
   return (
     <div>
@@ -46,7 +66,7 @@ export default function MessageOptionsMenu() {
       >
         <Stack  spacing={1} px={1}>
           {messageMenu.map((el: any, indx: any) => {
-            return(<MenuItem  onClick={() => {}}>{el.title}</MenuItem>)
+            return(<MenuItem  key={indx} onClick={() => handleMenu(el)}>{el.title}</MenuItem>)
           })}
         </Stack>
       </Menu>
