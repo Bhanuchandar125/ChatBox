@@ -1,7 +1,11 @@
 import {createSlice} from '@reduxjs/toolkit'
+import { useState } from 'react'
+
+
 
 const initialState ={
-    ReplayState :[]
+    ReplayState :[],
+    ReplayClicked:false
 }
 const ChatSlice = createSlice({
     name:"user",
@@ -9,6 +13,7 @@ const ChatSlice = createSlice({
     reducers:{
         Replay(state, action){
             state.ReplayState.push(action.payload)
+            state.ReplayClicked = true
         },
         Edit(state, action){
             console.log("Edit")

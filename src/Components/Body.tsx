@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { BsChatRightText } from 'react-icons/bs';
 import { GoPeople } from 'react-icons/go';
 import { BiVideoPlus } from 'react-icons/bi';
@@ -9,15 +9,18 @@ import  data from '../assets/UserData.json';
 import SimpleBar from 'simplebar-react';
 import 'simplebar-react/dist/simplebar.min.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { openedChat } from './Context';
 
 
 const Body = () => {
  
   const [chatClicked, setChatClicked] = useState<boolean>(false)
-  const [openChat, setOpenChat] = useState({})
+  const {openChat, setOpenChat} = useContext(openedChat)
 
   const handleopenchat = (chat:any)=>{
+   
     setOpenChat(chat) 
+    localStorage.setItem("openedchat", JSON.stringify(chat))
   }
   const scrollableNodeRef = React.createRef();
   return (
@@ -30,7 +33,7 @@ const Body = () => {
             <span className='sideSection_text'>Chat</span><ExpandMoreIcon className="expandmore"/>
             {chatClicked ? (
             data.map((each: any, index:number) => (
-              
+             
               <ChatList
                 key={index} 
                 className='chat-list'

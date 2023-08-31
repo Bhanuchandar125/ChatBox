@@ -10,22 +10,25 @@ import { MdOutlineFormatItalic, MdTextFormat } from "react-icons/md";
 import { BsTypeBold } from "react-icons/bs";
 import { PiTextUnderlineBold } from "react-icons/pi";
 import { DiCode } from "react-icons/di";
-import { useSelector } from 'react-redux';
-
-
+import { useSelector } from "react-redux";
+import ReplayInputComponent from "./ReplayInputComponent";
 
 const MessageInputSection = (props: any) => {
   const menuMessages = useSelector((state: any) => state.ChatSlice.ReplayState);
-
+  const isReplayClicked = useSelector(
+    (state: any) => state.ChatSlice.ReplayClicked
+  );
   const { selectedFiles, setSelectedFiles } = useContext(selectedFilesArray);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [isInputOpen, setIsInputOpen] = useState<boolean>(false);
-  const [isbold, setIsbold] = useState<boolean>(false)
+  const [isbold, setIsbold] = useState<boolean>(false);
+
   const handleEmojiSelect = (e: any) => {
     const emoji = e.native;
-    props.setMessage({ ...props.message, name: props.message.name + emoji });
+    console.log(emoji);
+    props.setMessage({ ...props.message, text: props.message.text + emoji });
   };
-  console.log("menuMessages", menuMessages)
+
   const emojiPickerRef = useRef<HTMLDivElement | null>(null);
 
   const handleClickOutside = (e: any) => {
@@ -55,9 +58,7 @@ const MessageInputSection = (props: any) => {
       }
     }
   };
-  const handleBold=()=>{
-
-  }
+  const handleBold = () => {};
   return (
     <div>
       {selectedFiles.length !== 0 ? (
@@ -88,69 +89,77 @@ const MessageInputSection = (props: any) => {
           })}
         </div>
       ) : null}
-      <div className={isInputOpen ? "inputOpen" : "inputsection"}>
-        <input
-          type="text"
-          className={`textinput ${isbold?"boldTextInput":""}`}
-          onChange={props.handlechangeMessage}
-          placeholder="Type Message..."
-          value={props.message?.name}
-          onDragOver={(e) => e.preventDefault()}
-          onDrop={props.handleFileDrop}
-          onKeyDown={handleEnterKeyPress}
-          
-        />
-        <div className={isInputOpen ? "texteditorOpen" : null}>
-          {isInputOpen ? (
-            <div className="textEditor">
-              <label onClick={handleBold}>
-                <BsTypeBold className={`textEditorIcons ${isbold?"textEditorIconsactive":""}`} />
+      {isReplayClicked ? (
+        <ReplayInputComponent/>
+      ) : (
+        <div className={isInputOpen ? "inputOpen" : "inputsection"}>
+          <input
+            type="text"
+            className={`textinput ${isbold ? "boldTextInput" : ""}`}
+            onChange={props.handlechangeMessage}
+            placeholder="Type Message..."
+            value={props.message?.text}
+            onDragOver={(e) => e.preventDefault()}
+            onDrop={props.handleFileDrop}
+            onKeyDown={handleEnterKeyPress}
+          />
+
+          <div className={isInputOpen ? "texteditorOpen" : null}>
+            {isInputOpen ? (
+              <div className="textEditor">
+                <label onClick={handleBold}>
+                  <BsTypeBold
+                    className={`textEditorIcons ${
+                      isbold ? "textEditorIconsactive" : ""
+                    }`}
+                  />
+                </label>
+                <label>
+                  <MdOutlineFormatItalic className="textEditorIcons" />
+                </label>
+                <label>
+                  <PiTextUnderlineBold className="textEditorIcons" />
+                </label>
+                <label>
+                  <DiCode className="textEditorIcons" />
+                </label>
+              </div>
+            ) : null}
+            <div>
+              <label onClick={() => setIsInputOpen(!isInputOpen)}>
+                <MdTextFormat className="customFileInput" />
               </label>
-              <label>
-                <MdOutlineFormatItalic className="textEditorIcons" />
+              <label htmlFor="fileInput">
+                <BiUpload className="customFileInput" />
               </label>
-              <label>
-                <PiTextUnderlineBold className="textEditorIcons" />
+              <input
+                type="file"
+                id="fileInput"
+                onChange={props.handleFileSelect}
+                multiple
+                style={{ display: "none" }}
+              />
+              <label className="emojibg" onClick={handleEmojiIconClick}>
+                <EmojiEmotionsOutlinedIcon />
               </label>
-              <label>
-                <DiCode className="textEditorIcons" />
+              {isOpen && (
+                <div className="emojiPickerContainer" ref={emojiPickerRef}>
+                  <Picker data={data} onEmojiSelect={handleEmojiSelect} />
+                </div>
+              )}
+              <label
+                onClick={
+                  props.editIndex !== null
+                    ? props.handleEditSave
+                    : props.handleSend
+                }
+              >
+                <AiOutlineSend className="sendIcon" />
               </label>
             </div>
-          ) : null}
-          <div>
-            <label onClick={() => setIsInputOpen(!isInputOpen)}>
-              <MdTextFormat className="customFileInput" />
-            </label>
-            <label htmlFor="fileInput">
-              <BiUpload className="customFileInput" />
-            </label>
-            <input
-              type="file"
-              id="fileInput"
-              onChange={props.handleFileSelect}
-              multiple
-              style={{ display: "none" }}
-            />
-            <label className="emojibg" onClick={handleEmojiIconClick}>
-              <EmojiEmotionsOutlinedIcon />
-            </label>
-            {isOpen && (
-              <div className="emojiPickerContainer" ref={emojiPickerRef}>
-                <Picker data={data} onEmojiSelect={handleEmojiSelect} />
-              </div>
-            )}
-            <label
-              onClick={
-                props.editIndex !== null
-                  ? props.handleEditSave
-                  : props.handleSend
-              }
-            >
-              <AiOutlineSend className="sendIcon" />
-            </label>
           </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };

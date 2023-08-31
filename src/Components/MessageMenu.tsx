@@ -9,9 +9,10 @@ import {useDispatch} from 'react-redux';
 import {Replay, Edit, Forward, Delete } from "../ReduxToolkit/ChatSlice";
 
 
+
 export default function MessageOptionsMenu(props:any) {
 const dispatch = useDispatch()
-
+ 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -24,17 +25,24 @@ const dispatch = useDispatch()
     Replay: Replay,
     Edit: Edit,
     Forward: Forward,
-    Delete: Delete
+    Delete: Delete,
+    
   };
 
-  
+ console.log(props,"props")
 const handleMenu =(el:any)=>{
   const actionCreator  = actionMap[el.title];
-  dispatch(actionCreator({
-    Message: props.Message,
-    Id:props.id,
-    type: el.title
-  }))
+  if (typeof actionCreator === 'function') {
+    dispatch(actionCreator({
+      Message: props.Message,
+      Id: props.id,
+      type: el.title,
+      // title:props.openedchat.name,
+      // prevMessage:props.openedchat.recent_message
+    }));
+  } else {
+    console.error(`Action creator for "${el.title}" not found.`);
+  }
 }
 
   return (

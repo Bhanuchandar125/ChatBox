@@ -1,6 +1,6 @@
 const messageMenu = [
     {
-        title:"Reply"
+        title:"Replay"
     },
     {
         title:"Edit"
