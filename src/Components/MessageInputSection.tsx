@@ -18,6 +18,9 @@ const MessageInputSection = (props: any) => {
   const isReplayClicked = useSelector(
     (state: any) => state.ChatSlice.ReplayClicked
   );
+  const ReplayMessage = useSelector((state:any)=>state.ChatSlice.ReplayState);
+  const sentMessage = useSelector((state:any)=>state.ChatSlice.displaymessages)
+
   const { selectedFiles, setSelectedFiles } = useContext(selectedFilesArray);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [isInputOpen, setIsInputOpen] = useState<boolean>(false);
@@ -25,10 +28,9 @@ const MessageInputSection = (props: any) => {
 
   const handleEmojiSelect = (e: any) => {
     const emoji = e.native;
-    console.log(emoji);
     props.setMessage({ ...props.message, text: props.message.text + emoji });
   };
-
+ console.log("ReplayMessage",ReplayMessage)
   const emojiPickerRef = useRef<HTMLDivElement | null>(null);
 
   const handleClickOutside = (e: any) => {
@@ -46,6 +48,7 @@ const MessageInputSection = (props: any) => {
   const handleEmojiIconClick = (e: React.MouseEvent<HTMLLabelElement>) => {
     e.stopPropagation();
     setIsOpen(!isOpen);
+    
   };
 
   const handleEnterKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -90,7 +93,9 @@ const MessageInputSection = (props: any) => {
         </div>
       ) : null}
       {isReplayClicked ? (
-        <ReplayInputComponent/>
+        <ReplayInputComponent
+        message={props.message?.text}
+        />
       ) : (
         <div className={isInputOpen ? "inputOpen" : "inputsection"}>
           <input

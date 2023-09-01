@@ -37,9 +37,9 @@ const handleMenu =(el:any)=>{
       Message: props.Message,
       Id: props.id,
       type: el.title,
-      // title:props.openedchat.name,
-      // prevMessage:props.openedchat.recent_message
+      prevmsgType:props.type
     }));
+    
   } else {
     console.error(`Action creator for "${el.title}" not found.`);
   }

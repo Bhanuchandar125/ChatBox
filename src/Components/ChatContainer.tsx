@@ -124,7 +124,10 @@ const ChatContainer = (props: any) => {
                       <source src={each.url} type="video/mp4" />
                       Your browser does not support the video tag.
                     </video>
-                    <MessageOptionsMenu />
+                    <MessageOptionsMenu
+                    message={each.url}
+                    type= "video/mp4" 
+                    id={index}/>
                   </li>
                 );
               } else if (each.type.startsWith("image")) {
@@ -135,7 +138,10 @@ const ChatContainer = (props: any) => {
                       alt={`Uploaded ${index}`}
                       className="imageContainer"
                     />
-                    <MessageOptionsMenu />
+                    <MessageOptionsMenu 
+                    message ={each.url}
+                    type="image"
+                    id={index}/>
                   </li>
                 );
               } else {
@@ -163,7 +169,8 @@ const ChatContainer = (props: any) => {
                         : {})}
                     />
                     <MessageOptionsMenu
-                    Message={each.name}
+                    Message={each.text}
+                    type="text"
                     id={index} />
                   </>
                 );

@@ -4,15 +4,23 @@ import { useState } from 'react'
 
 
 const initialState ={
-    ReplayState :[],
-    ReplayClicked:false
+    Message :{
+        message:"",
+        type:"",
+        replaymessage:false,
+    },
+    ReplayState :{},
+    ReplayClicked:false,
+    EmojiOpen:false,
+    EmojiSelect:null,
+    displaymessages:[]
 }
 const ChatSlice = createSlice({
     name:"user",
     initialState,
     reducers:{
         Replay(state, action){
-            state.ReplayState.push(action.payload)
+            state.ReplayState=action.payload
             state.ReplayClicked = true
         },
         Edit(state, action){
@@ -23,10 +31,28 @@ const ChatSlice = createSlice({
         },
         Delete(state, action){
             console.log("Delete")
+        },
+        EmojiClick(state, action){
+            state.EmojiOpen=action.payload
+            
+        },
+        EmojiSelect(state, action){
+            state.EmojiSelect= action.payload
+            state.Message.message= state.Message.message+action.payload
+        },
+        setMessage(state, action){
+            state.Message.message= action.payload
+            while(state.ReplayClicked){
+                state.Message.replaymessage=true
+            }
+        },
+        sendMessages(state, action){
+            state.displaymessages.push(action.payload)
+            state.ReplayClicked=false
         }
         
     }
 })
 
-export const {Replay, Edit, Forward, Delete } = ChatSlice.actions
+export const {Replay, Edit, Forward, Delete,EmojiClick,EmojiSelect, setMessage,sendMessages } = ChatSlice.actions
 export default ChatSlice.reducer
