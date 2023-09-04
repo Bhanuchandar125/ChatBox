@@ -10,10 +10,11 @@ import { sentMessagesArray } from "./Context";
 import { Avatar, MessageBox } from "react-chat-elements";
 import "react-chat-elements/dist/main.css";
 import MessageOptionsMenu from "./MessageMenu";
-import { useSelector } from "react-redux";
+import {sendMessages, setMessage} from '../ReduxToolkit/ChatSlice';
+import { useDispatch, useSelector } from "react-redux";
 
 const ChatContainer = (props: any) => {
-  const [message, setMessage] = useState<any>({ text: "", url: "", type: "" });
+  
   const [editIndex, setEditIndex] = useState<number | null>(null);
   const { selectedFiles, setSelectedFiles } = useContext(selectedFilesArray);
   const { sentmessages, setSentMessages } = useContext(sentMessagesArray);
@@ -22,15 +23,19 @@ const ChatContainer = (props: any) => {
   const isReplayClicked = useSelector((state:any)=>state.ChatSlice.ReplayClicked)
   const replayState = useSelector((state:any)=>state.ChatSlice.ReplayState)
 
+  const displayMessage = useSelector((state:any)=>state.ChatSlice.displaymessages)
+  const Message = useSelector((state:any)=>state.ChatSlice.Message)
 
+
+const dispatch = useDispatch()
 
   const handleSend = () => {
     if (selectedFiles.length !== 0) {
       setSentMessages([...sentmessages, ...selectedFiles]);
       setSelectedFiles([]);
-    } else if (message.text.trim() !== "") {
-      setSentMessages([...sentmessages, message]);
-      setMessage({ text: "", url: "", type: "" });
+    } else if (Message.message.trim() !== "") {
+      dispatch(sendMessages(Message))
+      
     }
   };
  
@@ -40,10 +45,12 @@ const ChatContainer = (props: any) => {
  },[openChat])
 
  
-  const handlechangeMessage = (e: any) => {
-    const value = e.target.value;
-    setMessage({ ...message, text: value, file: "", type: "text" });
+  const handlechangeMessage = (e:any) => {
+    const message = e.target.value;
+    
+    dispatch(setMessage(message))
   };
+  
   const handleEdit = (idx: number, message: any) => {
     setEditIndex(idx);
     setMessage(message);
@@ -101,12 +108,12 @@ const ChatContainer = (props: any) => {
         <div className="userTag">
        
             <Avatar
-              src={openedchat.profile_image}
+              src={openedchat?.profile_image}
               alt="avatar"
               size="xlarge"
               className="userProfileIcon"
             />     
-         <span className="userTitle">{openedchat.name}</span>
+         <span className="userTitle">{openedchat?.name}</span>
           <ExpandMore />
         </div>
 
@@ -115,8 +122,8 @@ const ChatContainer = (props: any) => {
       <hr />
       <div className="chatBody">
         <ul className="listcontainer">
-          {sentmessages &&
-            sentmessages.map((each: any, index: number) => {
+          {displayMessage &&
+            displayMessage.map((each: any, index: number) => {
               if (each.type.startsWith("video")) {
                 return (
                   <li className="videoContainer" key={index}>
@@ -154,11 +161,11 @@ const ChatContainer = (props: any) => {
                       position="right"
                       title="Liam Johnson"
                       type="text"
-                      text={each.text}
+                      text={each.message}
                       date={new Date()}
                       replyButton={false}
                       avatar={"https://randomuser.me/api/portraits/men/16.jpg"} 
-                      {...(isReplayClicked
+                      {...(each.replaymessage
                         ? {
                             reply: {
                               title: openedchat.name,
@@ -182,7 +189,7 @@ const ChatContainer = (props: any) => {
       <div className="messageinput">
         <MessageInputSection
           setMessage={setMessage}
-          message={message}
+          Message={Message}
           editIndex={editIndex}
           setEditIndex={setEditIndex}
           handleSend={handleSend}

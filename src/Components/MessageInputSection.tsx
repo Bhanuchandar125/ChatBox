@@ -10,8 +10,9 @@ import { MdOutlineFormatItalic, MdTextFormat } from "react-icons/md";
 import { BsTypeBold } from "react-icons/bs";
 import { PiTextUnderlineBold } from "react-icons/pi";
 import { DiCode } from "react-icons/di";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import ReplayInputComponent from "./ReplayInputComponent";
+import { EmojiSelect } from "../ReduxToolkit/ChatSlice";
 
 const MessageInputSection = (props: any) => {
   const menuMessages = useSelector((state: any) => state.ChatSlice.ReplayState);
@@ -25,10 +26,12 @@ const MessageInputSection = (props: any) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [isInputOpen, setIsInputOpen] = useState<boolean>(false);
   const [isbold, setIsbold] = useState<boolean>(false);
+  const dispatch = useDispatch()
 
   const handleEmojiSelect = (e: any) => {
     const emoji = e.native;
-    props.setMessage({ ...props.message, text: props.message.text + emoji });
+    // props.setMessage({ ...props.message, text: props.message.text + emoji });
+    dispatch(EmojiSelect(emoji))
   };
  console.log("ReplayMessage",ReplayMessage)
   const emojiPickerRef = useRef<HTMLDivElement | null>(null);
@@ -103,7 +106,7 @@ const MessageInputSection = (props: any) => {
             className={`textinput ${isbold ? "boldTextInput" : ""}`}
             onChange={props.handlechangeMessage}
             placeholder="Type Message..."
-            value={props.message?.text}
+            value={props.Message?.message}
             onDragOver={(e) => e.preventDefault()}
             onDrop={props.handleFileDrop}
             onKeyDown={handleEnterKeyPress}
