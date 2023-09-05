@@ -10,47 +10,52 @@ import { sentMessagesArray } from "./Context";
 import { Avatar, MessageBox } from "react-chat-elements";
 import "react-chat-elements/dist/main.css";
 import MessageOptionsMenu from "./MessageMenu";
-import {sendMessages, setMessage} from '../ReduxToolkit/ChatSlice';
+import { sendMessages, setMessage } from "../ReduxToolkit/ChatSlice";
 import { useDispatch, useSelector } from "react-redux";
 
 const ChatContainer = (props: any) => {
-  
   const [editIndex, setEditIndex] = useState<number | null>(null);
   const { selectedFiles, setSelectedFiles } = useContext(selectedFilesArray);
   const { sentmessages, setSentMessages } = useContext(sentMessagesArray);
   const [openedchat, setOpenedchat] = useState<any>({});
-  const {openChat} = useContext(openedChat);
-  const isReplayClicked = useSelector((state:any)=>state.ChatSlice.ReplayClicked)
-  const replayState = useSelector((state:any)=>state.ChatSlice.ReplayState)
+  const { openChat } = useContext(openedChat);
+  const isReplayClicked = useSelector(
+    (state: any) => state.ChatSlice.ReplayClicked
+  );
+  const replayState = useSelector((state: any) => state.ChatSlice.ReplayState);
 
-  const displayMessage = useSelector((state:any)=>state.ChatSlice.displaymessages)
-  const Message = useSelector((state:any)=>state.ChatSlice.Message)
+  const displayMessage = useSelector(
+    (state: any) => state.ChatSlice.displaymessages
+  );
+  const Message = useSelector((state: any) => state.ChatSlice.Message);
+  const replaymessage = useSelector(
+    (state: any) => state.ChatSlice.ReplayState
+  );
 
-
-const dispatch = useDispatch()
+  console.log("message", Message)
+  const dispatch = useDispatch();
 
   const handleSend = () => {
     if (selectedFiles.length !== 0) {
-      setSentMessages([...sentmessages, ...selectedFiles]);
+      // setSentMessages([...sentmessages, ...selectedFiles]);
+      dispatch(sendMessages([...selectedFiles]));
       setSelectedFiles([]);
     } else if (Message.message.trim() !== "") {
-      dispatch(sendMessages(Message))
-      
+      dispatch(sendMessages(Message));
     }
   };
- 
- useEffect(()=>{
-   const chat= localStorage.getItem("openedchat")
-   setOpenedchat(JSON.parse(chat))
- },[openChat])
 
- 
-  const handlechangeMessage = (e:any) => {
+  useEffect(() => {
+    const chat = localStorage.getItem("openedchat");
+    setOpenedchat(JSON.parse(chat));
+  }, [openChat]);
+
+  const handlechangeMessage = (e: any) => {
     const message = e.target.value;
-    
-    dispatch(setMessage(message))
+
+    dispatch(setMessage(message));
   };
-  
+
   const handleEdit = (idx: number, message: any) => {
     setEditIndex(idx);
     setMessage(message);
@@ -73,7 +78,7 @@ const dispatch = useDispatch()
         const type = e.target.files[i].type;
 
         if (type.startsWith("image") || type.startsWith("video")) {
-          selectedFilesArray.push({ text: "", url: url, type: type });
+          selectedFilesArray.push({ message: url, type: type });
         }
       }
       setSelectedFiles([...selectedFiles, ...selectedFilesArray]);
@@ -106,14 +111,13 @@ const dispatch = useDispatch()
           <ArrowBackIcon className="backbutton" />
         </div>
         <div className="userTag">
-       
-            <Avatar
-              src={openedchat?.profile_image}
-              alt="avatar"
-              size="xlarge"
-              className="userProfileIcon"
-            />     
-         <span className="userTitle">{openedchat?.name}</span>
+          <Avatar
+            src={openedchat?.profile_image}
+            alt="avatar"
+            size="xlarge"
+            className="userProfileIcon"
+          />
+          <span className="userTitle">{openedchat?.name}</span>
           <ExpandMore />
         </div>
 
@@ -124,61 +128,78 @@ const dispatch = useDispatch()
         <ul className="listcontainer">
           {displayMessage &&
             displayMessage.map((each: any, index: number) => {
-              if (each.type.startsWith("video")) {
+              if (each.type && each.type.startsWith("video")) {
                 return (
                   <li className="videoContainer" key={index}>
-                    <video controls className="videoContainer">
-                      <source src={each.url} type="video/mp4" />
+                    {/* <video controls className="videoContainer">
+                      <source src={each.message} type={each.type} />
                       Your browser does not support the video tag.
-                    </video>
+                    </video> */}
+                    <MessageBox
+                      position={"right"}
+                      type={"video"}
+                      title={openedchat.name}
+                      data={{
+                        uri: each.message,
+                      }}
+                    />
                     <MessageOptionsMenu
-                    message={each.url}
-                    type= "video/mp4" 
-                    id={index}/>
+                      message={each.url}
+                      type={each.type}
+                      id={index}
+                    />
                   </li>
                 );
-              } else if (each.type.startsWith("image")) {
+              } else if (each.type && each.type.startsWith("image")) {
                 return (
-                  <li className="imageContainer" key={index}>
-                    <img
-                      src={each.url}
-                      alt={`Uploaded ${index}`}
-                      className="imageContainer"
+                  <li key={index} className="imageContainer">
+                    
+                    <MessageBox
+                      position={"right"}
+                      type={"photo"}
+                      title={openedchat.name}
+                      
+                      data={{
+                        uri: each.message,
+                        height:150,
+                        width:300
+                      }}
                     />
-                    <MessageOptionsMenu 
-                    message ={each.url}
-                    type="image"
-                    id={index}/>
+                    <MessageOptionsMenu
+                      message={each.url}
+                      type="image"
+                      id={index}
+                    />
                   </li>
                 );
               } else {
                 return (
-                  
                   <>
                     <MessageBox
-                    
                       key={index}
                       position="right"
-                      title="Liam Johnson"
+                      title={openedchat.name}
                       type="text"
                       text={each.message}
                       date={new Date()}
                       replyButton={false}
-                      avatar={"https://randomuser.me/api/portraits/men/16.jpg"} 
+                      avatar={openedchat?.profile_image}
                       {...(each.replaymessage
                         ? {
                             reply: {
                               title: openedchat.name,
                               titleColor: "#8717ae",
-                              message: "Nice to meet you",
+                              message: replaymessage.Message,
                             },
                           }
                         : {})}
                     />
+
                     <MessageOptionsMenu
-                    Message={each.text}
-                    type="text"
-                    id={index} />
+                      Message={each.message}
+                      type="text"
+                      id={index}
+                    />
                   </>
                 );
               }
@@ -199,7 +220,6 @@ const dispatch = useDispatch()
           handleFileDrop={handleFileDrop}
           person={openedchat}
         />
-        
       </div>
     </div>
   );

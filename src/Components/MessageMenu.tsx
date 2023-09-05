@@ -29,14 +29,14 @@ const dispatch = useDispatch()
     
   };
 
- console.log(props,"props")
 const handleMenu =(el:any)=>{
+ 
   const actionCreator  = actionMap[el.title];
   if (typeof actionCreator === 'function') {
     dispatch(actionCreator({
       Message: props.Message,
       Id: props.id,
-      type: el.title,
+      action: el.title,
       prevmsgType:props.type
     }));
     

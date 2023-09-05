@@ -1,4 +1,4 @@
-import React, { useContext, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import "./ReplayMessage.css";
 import { MessageBox } from "react-chat-elements";
@@ -11,6 +11,8 @@ import { EmojiClick, EmojiSelect, setMessage,sendMessages } from "../ReduxToolki
 // import {Message} from './Context'
 
 const ReplayInputComponent = () => {
+  const [openedchat, setOpenedchat] = useState<any>({});
+
   const emojiPickerRef = useRef<HTMLDivElement | null>(null);
 const dispatch = useDispatch()
 
@@ -25,14 +27,18 @@ const Message = useSelector((state:any)=>state.ChatSlice.Message)
     const value = e.target.value 
     dispatch(setMessage(value))
   }
+  useEffect(()=>{
+    const chat= localStorage.getItem("openedchat")
+    setOpenedchat(JSON.parse(chat))
+  },[openChat])
   
-console.log("Message", Message)
+
  const handleEmojiClick=()=>{
  dispatch(EmojiClick(!EmojiOpen))
  }
  const handleEmojiSelect=(e:any)=>{
    const emoji = e.native;
-  //  setMessage({...message, Message:message+emoji})
+  
   dispatch(EmojiSelect(emoji))
  }
  const handlesend=()=>{
@@ -56,9 +62,10 @@ console.log("Message", Message)
           />
         ) : (
           <MessageBox
-            title="Liam Johnson"
+            title={openedchat.name}
             type="text"
             text={Replaymessage.Message}
+            // value = {Replaymessage.Message}
             replyButton={false}
           />
         )}

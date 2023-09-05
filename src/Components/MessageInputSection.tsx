@@ -33,7 +33,7 @@ const MessageInputSection = (props: any) => {
     // props.setMessage({ ...props.message, text: props.message.text + emoji });
     dispatch(EmojiSelect(emoji))
   };
- console.log("ReplayMessage",ReplayMessage)
+
   const emojiPickerRef = useRef<HTMLDivElement | null>(null);
 
   const handleClickOutside = (e: any) => {
@@ -74,7 +74,7 @@ const MessageInputSection = (props: any) => {
               return (
                 <div className="selectedFilePreview" key={index}>
                   <img
-                    src={file.url}
+                    src={file.message}
                     alt={`Selected File ${index}`}
                     className="selectedImage"
                   />
@@ -84,7 +84,7 @@ const MessageInputSection = (props: any) => {
               return (
                 <video controls className="selectedImage" key={index}>
                   <source
-                    src={file.url}
+                    src={file.message}
                     type="video/mp4"
                     className="selectedImage"
                   />

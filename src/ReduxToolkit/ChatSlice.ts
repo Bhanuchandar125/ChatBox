@@ -6,12 +6,13 @@ const initialState = {
     message: "",
     type: "",
     replaymessage: false,
+    prevMessage:""
   },
   ReplayState: {},
   ReplayClicked: false,
   EmojiOpen: false,
   EmojiSelect: null,
-  displaymessages: [],
+  displaymessages: <any>[],
 };
 const ChatSlice = createSlice({
   name: "user",
@@ -44,11 +45,15 @@ const ChatSlice = createSlice({
       state.Message.replaymessage = state.ReplayClicked;
     },
     sendMessages(state, action) {
-      state.displaymessages.push(action.payload);
+      
+      state.displaymessages = [...state.displaymessages, ...action.payload];
       state.ReplayClicked = false;
       state.Message.message="",state.Message.type ="", state.Message.replaymessage=false
+      
     },
+    
   },
+  
 });
 
 export const {
