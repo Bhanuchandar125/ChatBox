@@ -1,17 +1,21 @@
 import * as React from "react";
-import Button from "@mui/material/Button";
+
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { Stack } from "@mui/material";
 import { messageMenu } from "../assets/msgmenu";
 import { PiDotsThreeVertical } from "react-icons/pi";
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {Replay, Edit, Forward, Delete } from "../ReduxToolkit/ChatSlice";
 
 
 
 export default function MessageOptionsMenu(props:any) {
 const dispatch = useDispatch()
+
+const displayMessage = useSelector(
+  (state: any) => state.ChatSlice.displaymessages
+);
  
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -44,7 +48,7 @@ const handleMenu =(el:any)=>{
     console.error(`Action creator for "${el.title}" not found.`);
   }
 }
-
+console.log(displayMessage)
   return (
     <div>
       <PiDotsThreeVertical

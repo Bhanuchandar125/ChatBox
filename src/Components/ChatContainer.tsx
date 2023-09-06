@@ -3,7 +3,6 @@ import "./ChatContainer.css";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { ExpandMore } from "@mui/icons-material";
 import { BiVideo } from "react-icons/bi";
-import { MdOutlineModeEditOutline } from "react-icons/md";
 import MessageInputSection from "./MessageInputSection";
 import { openedChat, selectedFilesArray } from "./Context";
 import { sentMessagesArray } from "./Context";
@@ -32,7 +31,7 @@ const ChatContainer = (props: any) => {
     (state: any) => state.ChatSlice.ReplayState
   );
 
-  console.log("message", Message)
+  
   const dispatch = useDispatch();
 
   const handleSend = () => {
@@ -44,14 +43,15 @@ const ChatContainer = (props: any) => {
       dispatch(sendMessages(Message));
     }
   };
-
+  
   useEffect(() => {
-    const chat = localStorage.getItem("openedchat");
+    const chat:any = localStorage.getItem("openedchat");
     setOpenedchat(JSON.parse(chat));
   }, [openChat]);
 
   const handlechangeMessage = (e: any) => {
     const message = e.target.value;
+    console.log(message,"message")
 
     dispatch(setMessage(message));
   };
@@ -219,6 +219,7 @@ const ChatContainer = (props: any) => {
           handleFileSelect={handleFileSelect}
           handleFileDrop={handleFileDrop}
           person={openedchat}
+          handleEdit = {handleEdit}
         />
       </div>
     </div>

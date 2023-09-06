@@ -12,20 +12,19 @@ import { PiTextUnderlineBold } from "react-icons/pi";
 import { DiCode } from "react-icons/di";
 import { useDispatch, useSelector } from "react-redux";
 import ReplayInputComponent from "./ReplayInputComponent";
-import { EmojiSelect } from "../ReduxToolkit/ChatSlice";
+import { EditSave, EmojiSelect } from "../ReduxToolkit/ChatSlice";
 
 const MessageInputSection = (props: any) => {
   const menuMessages = useSelector((state: any) => state.ChatSlice.ReplayState);
   const isReplayClicked = useSelector(
     (state: any) => state.ChatSlice.ReplayClicked
   );
-  const ReplayMessage = useSelector((state:any)=>state.ChatSlice.ReplayState);
-  const sentMessage = useSelector((state:any)=>state.ChatSlice.displaymessages)
-
+  const editMessage =useSelector((state:any)=>state.ChatSlice.editMessage)
   const { selectedFiles, setSelectedFiles } = useContext(selectedFilesArray);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [isInputOpen, setIsInputOpen] = useState<boolean>(false);
   const [isbold, setIsbold] = useState<boolean>(false);
+  const editMode = useSelector((state:any)=>state.ChatSlice.editMode)
   const dispatch = useDispatch()
 
   const handleEmojiSelect = (e: any) => {
@@ -53,6 +52,11 @@ const MessageInputSection = (props: any) => {
     setIsOpen(!isOpen);
     
   };
+
+  const handleEditSave = (e:any)=>{
+    console.log(e.target.value)
+    // dispatch(EditSave())
+  }
 
   const handleEnterKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
@@ -87,6 +91,7 @@ const MessageInputSection = (props: any) => {
                     src={file.message}
                     type="video/mp4"
                     className="selectedImage"
+                    
                   />
                   Your browser does not support the video tag.
                 </video>
@@ -106,7 +111,7 @@ const MessageInputSection = (props: any) => {
             className={`textinput ${isbold ? "boldTextInput" : ""}`}
             onChange={props.handlechangeMessage}
             placeholder="Type Message..."
-            value={props.Message?.message}
+            value={editMode?editMessage.Message:props.Message.message}
             onDragOver={(e) => e.preventDefault()}
             onDrop={props.handleFileDrop}
             onKeyDown={handleEnterKeyPress}
@@ -156,11 +161,7 @@ const MessageInputSection = (props: any) => {
                 </div>
               )}
               <label
-                onClick={
-                  props.editIndex !== null
-                    ? props.handleEditSave
-                    : props.handleSend
-                }
+                onClick={editMode? handleEditSave: props.handleSend}
               >
                 <AiOutlineSend className="sendIcon" />
               </label>

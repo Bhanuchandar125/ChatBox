@@ -30,7 +30,7 @@ const Message = useSelector((state:any)=>state.ChatSlice.Message)
   useEffect(()=>{
     const chat= localStorage.getItem("openedchat")
     setOpenedchat(JSON.parse(chat))
-  },[openChat])
+  },[])
   
 
  const handleEmojiClick=()=>{
