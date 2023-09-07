@@ -48,7 +48,7 @@ const handleMenu =(el:any)=>{
     console.error(`Action creator for "${el.title}" not found.`);
   }
 }
-console.log(displayMessage)
+
   return (
     <div>
       <PiDotsThreeVertical

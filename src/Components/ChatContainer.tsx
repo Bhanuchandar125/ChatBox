@@ -5,68 +5,57 @@ import { ExpandMore } from "@mui/icons-material";
 import { BiVideo } from "react-icons/bi";
 import MessageInputSection from "./MessageInputSection";
 import { openedChat, selectedFilesArray } from "./Context";
-import { sentMessagesArray } from "./Context";
 import { Avatar, MessageBox } from "react-chat-elements";
 import "react-chat-elements/dist/main.css";
 import MessageOptionsMenu from "./MessageMenu";
-import { sendMessages, setMessage } from "../ReduxToolkit/ChatSlice";
+import {
+
+  EditSave,
+  sendMessages,
+  setMessage,
+} from "../ReduxToolkit/ChatSlice";
 import { useDispatch, useSelector } from "react-redux";
 
 const ChatContainer = (props: any) => {
-  const [editIndex, setEditIndex] = useState<number | null>(null);
   const { selectedFiles, setSelectedFiles } = useContext(selectedFilesArray);
-  const { sentmessages, setSentMessages } = useContext(sentMessagesArray);
   const [openedchat, setOpenedchat] = useState<any>({});
   const { openChat } = useContext(openedChat);
-  const isReplayClicked = useSelector(
-    (state: any) => state.ChatSlice.ReplayClicked
-  );
-  const replayState = useSelector((state: any) => state.ChatSlice.ReplayState);
+  const [editIndex, setEditIndex] = useState<number | null>(null);
+  const [editedMessage, setEditedMessage] = useState("");
+  
 
   const displayMessage = useSelector(
     (state: any) => state.ChatSlice.displaymessages
   );
   const Message = useSelector((state: any) => state.ChatSlice.Message);
-  const replaymessage = useSelector(
-    (state: any) => state.ChatSlice.ReplayState
-  );
-
   
   const dispatch = useDispatch();
 
   const handleSend = () => {
     if (selectedFiles.length !== 0) {
-      // setSentMessages([...sentmessages, ...selectedFiles]);
       dispatch(sendMessages([...selectedFiles]));
       setSelectedFiles([]);
     } else if (Message.message.trim() !== "") {
       dispatch(sendMessages(Message));
     }
   };
-  
+
   useEffect(() => {
-    const chat:any = localStorage.getItem("openedchat");
+    const chat: any = localStorage.getItem("openedchat");
     setOpenedchat(JSON.parse(chat));
   }, [openChat]);
 
   const handlechangeMessage = (e: any) => {
     const message = e.target.value;
-    console.log(message,"message")
-
     dispatch(setMessage(message));
   };
 
-  const handleEdit = (idx: number, message: any) => {
-    setEditIndex(idx);
-    setMessage(message);
-  };
   const handleEditSave = () => {
-    if (editIndex !== null) {
-      let updatedmessages = [...sentmessages];
-      updatedmessages[editIndex] = message;
-      setSentMessages(updatedmessages);
+    if (editIndex !== null && editedMessage.trim() !== "") {
+      // Dispatch the action to save the edited message
+      dispatch(EditSave({ index: editIndex, editedMessage }));
       setEditIndex(null);
-      setMessage({ text: "", url: "", type: "" });
+      setEditedMessage(""); // Clear the edited message
     }
   };
 
@@ -131,10 +120,6 @@ const ChatContainer = (props: any) => {
               if (each.type && each.type.startsWith("video")) {
                 return (
                   <li className="videoContainer" key={index}>
-                    {/* <video controls className="videoContainer">
-                      <source src={each.message} type={each.type} />
-                      Your browser does not support the video tag.
-                    </video> */}
                     <MessageBox
                       position={"right"}
                       type={"video"}
@@ -153,16 +138,14 @@ const ChatContainer = (props: any) => {
               } else if (each.type && each.type.startsWith("image")) {
                 return (
                   <li key={index} className="imageContainer">
-                    
                     <MessageBox
                       position={"right"}
                       type={"photo"}
                       title={openedchat.name}
-                      
                       data={{
                         uri: each.message,
-                        height:150,
-                        width:300
+                        height: 150,
+                        width: 300,
                       }}
                     />
                     <MessageOptionsMenu
@@ -184,12 +167,12 @@ const ChatContainer = (props: any) => {
                       date={new Date()}
                       replyButton={false}
                       avatar={openedchat?.profile_image}
-                      {...(each.replaymessage
+                      {...(each.prevMessage.trim() !== ""
                         ? {
                             reply: {
                               title: openedchat.name,
                               titleColor: "#8717ae",
-                              message: replaymessage.Message,
+                              message: each.prevMessage,
                             },
                           }
                         : {})}
@@ -219,7 +202,6 @@ const ChatContainer = (props: any) => {
           handleFileSelect={handleFileSelect}
           handleFileDrop={handleFileDrop}
           person={openedchat}
-          handleEdit = {handleEdit}
         />
       </div>
     </div>

@@ -15,22 +15,21 @@ import ReplayInputComponent from "./ReplayInputComponent";
 import { EditSave, EmojiSelect } from "../ReduxToolkit/ChatSlice";
 
 const MessageInputSection = (props: any) => {
-  const menuMessages = useSelector((state: any) => state.ChatSlice.ReplayState);
-  const isReplayClicked = useSelector(
+    const isReplayClicked = useSelector(
     (state: any) => state.ChatSlice.ReplayClicked
   );
-  const editMessage =useSelector((state:any)=>state.ChatSlice.editMessage)
   const { selectedFiles, setSelectedFiles } = useContext(selectedFilesArray);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [isInputOpen, setIsInputOpen] = useState<boolean>(false);
   const [isbold, setIsbold] = useState<boolean>(false);
-  const editMode = useSelector((state:any)=>state.ChatSlice.editMode)
-  const dispatch = useDispatch()
+  const editMode = useSelector((state: any) => state.ChatSlice.editMode);
+  const message = useSelector((state: any) => state.ChatSlice.Message);
+  const editIndex = useSelector((state: any) => state.ChatSlice.editIndex);
+  const dispatch = useDispatch();
 
   const handleEmojiSelect = (e: any) => {
     const emoji = e.native;
-    // props.setMessage({ ...props.message, text: props.message.text + emoji });
-    dispatch(EmojiSelect(emoji))
+    dispatch(EmojiSelect(emoji));
   };
 
   const emojiPickerRef = useRef<HTMLDivElement | null>(null);
@@ -42,7 +41,6 @@ const MessageInputSection = (props: any) => {
   };
   useEffect(() => {
     document.addEventListener("click", handleClickOutside);
-
     return () => {
       document.removeEventListener("click", handleClickOutside);
     };
@@ -50,19 +48,16 @@ const MessageInputSection = (props: any) => {
   const handleEmojiIconClick = (e: React.MouseEvent<HTMLLabelElement>) => {
     e.stopPropagation();
     setIsOpen(!isOpen);
-    
   };
-
-  const handleEditSave = (e:any)=>{
-    console.log(e.target.value)
-    // dispatch(EditSave())
-  }
+  const handleEditSave = () => {
+    dispatch(EditSave({ message, editIndex }));
+  };
 
   const handleEnterKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
       e.preventDefault();
-      if (props.editIndex !== null) {
-        props.handleEditSave();
+      if (editMode) {
+        handleEditSave();
       } else {
         props.handleSend();
       }
@@ -91,7 +86,6 @@ const MessageInputSection = (props: any) => {
                     src={file.message}
                     type="video/mp4"
                     className="selectedImage"
-                    
                   />
                   Your browser does not support the video tag.
                 </video>
@@ -101,9 +95,7 @@ const MessageInputSection = (props: any) => {
         </div>
       ) : null}
       {isReplayClicked ? (
-        <ReplayInputComponent
-        message={props.message?.text}
-        />
+        <ReplayInputComponent message={props.message?.text} />
       ) : (
         <div className={isInputOpen ? "inputOpen" : "inputsection"}>
           <input
@@ -111,7 +103,8 @@ const MessageInputSection = (props: any) => {
             className={`textinput ${isbold ? "boldTextInput" : ""}`}
             onChange={props.handlechangeMessage}
             placeholder="Type Message..."
-            value={editMode?editMessage.Message:props.Message.message}
+            value={props.Message.message}
+            // value={editMode?editMessage.Message:props.Message.message}
             onDragOver={(e) => e.preventDefault()}
             onDrop={props.handleFileDrop}
             onKeyDown={handleEnterKeyPress}
@@ -160,9 +153,7 @@ const MessageInputSection = (props: any) => {
                   <Picker data={data} onEmojiSelect={handleEmojiSelect} />
                 </div>
               )}
-              <label
-                onClick={editMode? handleEditSave: props.handleSend}
-              >
+              <label onClick={editMode ? handleEditSave : props.handleSend}>
                 <AiOutlineSend className="sendIcon" />
               </label>
             </div>

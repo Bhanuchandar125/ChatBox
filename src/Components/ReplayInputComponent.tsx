@@ -13,20 +13,27 @@ import { EmojiClick, EmojiSelect, setMessage,sendMessages } from "../ReduxToolki
 const ReplayInputComponent = () => {
   const [openedchat, setOpenedchat] = useState<any>({});
 
+  
   const emojiPickerRef = useRef<HTMLDivElement | null>(null);
 const dispatch = useDispatch()
 
 const Message = useSelector((state:any)=>state.ChatSlice.Message)
 
   const Replaymessage = useSelector(
-    (state: any) => state.ChatSlice.ReplayState
+    (state: any) => state.ChatSlice.ReplayMessage
   );
   const EmojiOpen = useSelector((state:any)=>state.ChatSlice.EmojiOpen)
-
+  
   const handleOnChange=(e:any)=>{
-    const value = e.target.value 
-    dispatch(setMessage(value))
+    const message = e.target.value 
+    const prevmessage = Replaymessage.Message
+    
+    if (Replaymessage) {
+      dispatch(setMessage({ message, prevmessage }));
+    }
+    
   }
+  
   useEffect(()=>{
     const chat= localStorage.getItem("openedchat")
     setOpenedchat(JSON.parse(chat))
@@ -44,7 +51,13 @@ const Message = useSelector((state:any)=>state.ChatSlice.Message)
  const handlesend=()=>{
   dispatch(sendMessages(Message))
  }
-
+ 
+ const handleKeyDown=(e:any)=>{
+  
+  if (e.key==="Enter"){
+    handlesend()
+  }
+ }
  
   return (
     <div className="inputOpen">
@@ -77,6 +90,7 @@ const Message = useSelector((state:any)=>state.ChatSlice.Message)
           className="textinput"
           value={Message.message}
           onChange={handleOnChange}
+          onKeyDown={handleKeyDown}
           
         />
         <label htmlFor="fileInput">

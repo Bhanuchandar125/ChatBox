@@ -9,8 +9,8 @@ const initialState = {
     prevMessage:""
   },
   editMode:false,
-  editMessage:{},
-  ReplayState:<any> {},
+  editIndex:null,
+  ReplayMessage:<any> {},
   ReplayClicked: false,
   EmojiOpen: false,
   EmojiSelect: null,
@@ -21,22 +21,26 @@ const ChatSlice = createSlice({
   initialState,
   reducers: {
     Replay(state, action) {
-      console.log("Replay",action.payload)
+      // console.log("Replay",action.payload)
       const { Id, Message } = action.payload;
-      state.ReplayState=action.payload
-      state.displaymessages[Id].replaymessage= Message
+      state.ReplayMessage=action.payload
+      
       
       state.ReplayClicked = true;
     },
     Edit(state, action) {
-      console.log("edit", action.payload)
-      state.editMode= !state.editMode
-      state.editMessage = action.payload
+      state.editMode= true
+      state.editIndex= action.payload.Id     
+      state.Message.message =  action.payload.Message
     },
     EditSave(state, action){
-      let updatedmessages= [...state.displaymessages]
-      const editingIndex = state.editMessage.Id
-      updatedmessages[editingIndex].Message = action.payload
+      const {message,editIndex} = action.payload;
+      console.log(message, editIndex)
+      state.displaymessages[editIndex].message = message.message;
+      state.editMode = false
+      
+      state.Message.message=""
+      
     },
     Forward(state, action) {
       console.log("Forward");
@@ -54,10 +58,23 @@ const ChatSlice = createSlice({
       state.Message.message = state.Message.message + action.payload;
     },
     setMessage(state, action) {
-        
-      state.Message.message = action.payload;
-      state.Message.type="text";
-      state.Message.replaymessage = state.ReplayClicked;
+      
+      
+        if(state.ReplayClicked){
+          // console.log("ab", action.payload)
+          const {message, prevmessage} = action.payload
+          
+          state.Message.message= message
+          state.Message.prevMessage= prevmessage
+          state.Message.replaymessage=true 
+
+        }else{
+          console.log("abcd")
+          state.Message.message =  action.payload
+          state.Message.type="text";
+          state.Message.replaymessage = state.ReplayClicked;
+        }
+      
     },
     sendMessages(state, action) {
       if(Array.isArray(action.payload)){
@@ -67,8 +84,10 @@ const ChatSlice = createSlice({
       }
       
       state.ReplayClicked = false;
-      state.Message.message="",state.Message.type ="", state.Message.replaymessage=false
-      
+      state.Message.message="",state.Message.type ="", state.Message.replaymessage=false,
+      state.Message.prevMessage=""
+      state.ReplayMessage={}
+      state.ReplayClicked=false
     },
     
   },

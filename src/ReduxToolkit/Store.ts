@@ -7,5 +7,4 @@ const Store = configureStore({
         ChatSlice:ChatSlice,
     }
 })
-
-export default Store
+export default Store    
