@@ -3,7 +3,7 @@ import { useState } from "react";
 
 const initialState = {
   Message: {
-    message: "",
+    message: null,
     type: "",
     replaymessage: false,
     prevMessage:""
@@ -39,7 +39,7 @@ const ChatSlice = createSlice({
       state.displaymessages[editIndex].message = message.message;
       state.editMode = false
       
-      state.Message.message=""
+      state.Message.message=null
       
     },
     Forward(state, action) {
@@ -58,8 +58,7 @@ const ChatSlice = createSlice({
       state.Message.message = state.Message.message + action.payload;
     },
     setMessage(state, action) {
-      
-      
+           
         if(state.ReplayClicked){
           // console.log("ab", action.payload)
           const {message, prevmessage} = action.payload
@@ -69,7 +68,7 @@ const ChatSlice = createSlice({
           state.Message.replaymessage=true 
 
         }else{
-          console.log("abcd")
+            
           state.Message.message =  action.payload
           state.Message.type="text";
           state.Message.replaymessage = state.ReplayClicked;
@@ -84,7 +83,7 @@ const ChatSlice = createSlice({
       }
       
       state.ReplayClicked = false;
-      state.Message.message="",state.Message.type ="", state.Message.replaymessage=false,
+      state.Message.message=null,state.Message.type ="", state.Message.replaymessage=false,
       state.Message.prevMessage=""
       state.ReplayMessage={}
       state.ReplayClicked=false

@@ -23,6 +23,7 @@ const ChatContainer = (props: any) => {
   const [editIndex, setEditIndex] = useState<number | null>(null);
   const [editedMessage, setEditedMessage] = useState("");
   
+  
 
   const displayMessage = useSelector(
     (state: any) => state.ChatSlice.displaymessages
@@ -35,7 +36,7 @@ const ChatContainer = (props: any) => {
     if (selectedFiles.length !== 0) {
       dispatch(sendMessages([...selectedFiles]));
       setSelectedFiles([]);
-    } else if (Message.message.trim() !== "") {
+    } else if (Message.message?.trim() !== "") {
       dispatch(sendMessages(Message));
     }
   };
@@ -59,6 +60,13 @@ const ChatContainer = (props: any) => {
     }
   };
 
+   const htmlText = (message:string)=>{
+    const parser =  new DOMParser()
+    const htmlContent = parser.parseFromString(message,'text/html')
+    
+    const htmlString = htmlContent.documentElement.innerHTML; // Get the HTML content as a string
+    return htmlString;
+   }
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFilesArray: any[] = [];
     if (e.target.files) {
@@ -158,6 +166,12 @@ const ChatContainer = (props: any) => {
               } else {
                 return (
                   <>
+                  {(each.message.startsWith("<"))?(
+                  <div dangerouslySetInnerHTML={{
+                    __html: htmlText(each.message)
+                  }}>
+                    
+                  </div>):(
                     <MessageBox
                       key={index}
                       position="right"
@@ -177,6 +191,8 @@ const ChatContainer = (props: any) => {
                           }
                         : {})}
                     />
+                  )}
+                    
 
                     <MessageOptionsMenu
                       Message={each.message}

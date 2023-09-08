@@ -13,6 +13,7 @@ import { DiCode } from "react-icons/di";
 import { useDispatch, useSelector } from "react-redux";
 import ReplayInputComponent from "./ReplayInputComponent";
 import { EditSave, EmojiSelect } from "../ReduxToolkit/ChatSlice";
+import TextEditer from "./TextEditer";
 
 const MessageInputSection = (props: any) => {
     const isReplayClicked = useSelector(
@@ -63,7 +64,7 @@ const MessageInputSection = (props: any) => {
       }
     }
   };
-  const handleBold = () => {};
+  
   return (
     <div>
       {selectedFiles.length !== 0 ? (
@@ -98,38 +99,39 @@ const MessageInputSection = (props: any) => {
         <ReplayInputComponent message={props.message?.text} />
       ) : (
         <div className={isInputOpen ? "inputOpen" : "inputsection"}>
+          {!isInputOpen&&
           <input
             type="text"
             className={`textinput ${isbold ? "boldTextInput" : ""}`}
             onChange={props.handlechangeMessage}
             placeholder="Type Message..."
             value={props.Message.message}
-            // value={editMode?editMessage.Message:props.Message.message}
             onDragOver={(e) => e.preventDefault()}
             onDrop={props.handleFileDrop}
             onKeyDown={handleEnterKeyPress}
-          />
+          />}
 
-          <div className={isInputOpen ? "texteditorOpen" : null}>
+          <div /*className={isInputOpen ? "texteditorOpen" : null}*/>
             {isInputOpen ? (
-              <div className="textEditor">
-                <label onClick={handleBold}>
-                  <BsTypeBold
-                    className={`textEditorIcons ${
-                      isbold ? "textEditorIconsactive" : ""
-                    }`}
-                  />
-                </label>
-                <label>
-                  <MdOutlineFormatItalic className="textEditorIcons" />
-                </label>
-                <label>
-                  <PiTextUnderlineBold className="textEditorIcons" />
-                </label>
-                <label>
-                  <DiCode className="textEditorIcons" />
-                </label>
-              </div>
+              // <div className="textEditor">
+              //   <label onClick={handleBold}>
+              //     <BsTypeBold
+              //       className={`textEditorIcons ${
+              //         isbold ? "textEditorIconsactive" : ""
+              //       }`}
+              //     />
+              //   </label>
+              //   <label>
+              //     <MdOutlineFormatItalic className="textEditorIcons" />
+              //   </label>
+              //   <label>
+              //     <PiTextUnderlineBold className="textEditorIcons" />
+              //   </label>
+              //   <label>
+              //     <DiCode className="textEditorIcons" />
+              //   </label>
+              // </div>
+              <TextEditer/>
             ) : null}
             <div>
               <label onClick={() => setIsInputOpen(!isInputOpen)}>
