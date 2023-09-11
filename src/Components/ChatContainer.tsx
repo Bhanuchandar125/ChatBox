@@ -16,13 +16,14 @@ import {
 } from "../ReduxToolkit/ChatSlice";
 import { useDispatch, useSelector } from "react-redux";
 
+
 const ChatContainer = (props: any) => {
   const { selectedFiles, setSelectedFiles } = useContext(selectedFilesArray);
   const [openedchat, setOpenedchat] = useState<any>({});
   const { openChat } = useContext(openedChat);
   const [editIndex, setEditIndex] = useState<number | null>(null);
   const [editedMessage, setEditedMessage] = useState("");
-  
+  const [isInputOpen, setIsInputOpen] = useState<boolean>(false);
   
 
   const displayMessage = useSelector(
@@ -36,8 +37,10 @@ const ChatContainer = (props: any) => {
     if (selectedFiles.length !== 0) {
       dispatch(sendMessages([...selectedFiles]));
       setSelectedFiles([]);
+      
     } else if (Message.message?.trim() !== "") {
       dispatch(sendMessages(Message));
+      setIsInputOpen(false)
     }
   };
 
@@ -61,10 +64,12 @@ const ChatContainer = (props: any) => {
   };
 
    const htmlText = (message:string)=>{
+    
     const parser =  new DOMParser()
     const htmlContent = parser.parseFromString(message,'text/html')
     
     const htmlString = htmlContent.documentElement.innerHTML; // Get the HTML content as a string
+   
     return htmlString;
    }
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -167,10 +172,15 @@ const ChatContainer = (props: any) => {
                 return (
                   <>
                   {(each.message.startsWith("<"))?(
-                  <div dangerouslySetInnerHTML={{
+                    <div className="texteditContainer">
+                      <div className="textHead">
+                      <Avatar alt={openedchat.name} src={openedchat?.profile_image} />
+                        <label className="chatname">{openedchat.name}</label>
+                      </div>
+                  <div  className="chattext" dangerouslySetInnerHTML={{
                     __html: htmlText(each.message)
                   }}>
-                    
+                    </div>
                   </div>):(
                     <MessageBox
                       key={index}
@@ -193,7 +203,6 @@ const ChatContainer = (props: any) => {
                     />
                   )}
                     
-
                     <MessageOptionsMenu
                       Message={each.message}
                       type="text"
@@ -218,6 +227,8 @@ const ChatContainer = (props: any) => {
           handleFileSelect={handleFileSelect}
           handleFileDrop={handleFileDrop}
           person={openedchat}
+          isInputOpen={isInputOpen}
+          setIsInputOpen={setIsInputOpen}
         />
       </div>
     </div>

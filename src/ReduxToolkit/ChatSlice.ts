@@ -3,7 +3,7 @@ import { useState } from "react";
 
 const initialState = {
   Message: {
-    message: null,
+    message: "",
     type: "",
     replaymessage: false,
     prevMessage:""
@@ -39,7 +39,7 @@ const ChatSlice = createSlice({
       state.displaymessages[editIndex].message = message.message;
       state.editMode = false
       
-      state.Message.message=null
+      state.Message.message=""
       
     },
     Forward(state, action) {
@@ -83,7 +83,7 @@ const ChatSlice = createSlice({
       }
       
       state.ReplayClicked = false;
-      state.Message.message=null,state.Message.type ="", state.Message.replaymessage=false,
+      state.Message.message="",state.Message.type ="", state.Message.replaymessage=false,
       state.Message.prevMessage=""
       state.ReplayMessage={}
       state.ReplayClicked=false

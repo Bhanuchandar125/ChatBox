@@ -6,14 +6,13 @@ import Picker from "@emoji-mart/react";
 import "./ChatContainer.css";
 import { selectedFilesArray } from "./Context";
 import { useContext, useEffect, useRef, useState } from "react";
-import { MdOutlineFormatItalic, MdTextFormat } from "react-icons/md";
-import { BsTypeBold } from "react-icons/bs";
-import { PiTextUnderlineBold } from "react-icons/pi";
-import { DiCode } from "react-icons/di";
+import {  MdTextFormat } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import ReplayInputComponent from "./ReplayInputComponent";
 import { EditSave, EmojiSelect } from "../ReduxToolkit/ChatSlice";
 import TextEditer from "./TextEditer";
+import { MentionsInput, Mention } from 'react-mentions'
+import userData from '../assets/UserData.json'
 
 const MessageInputSection = (props: any) => {
     const isReplayClicked = useSelector(
@@ -21,8 +20,8 @@ const MessageInputSection = (props: any) => {
   );
   const { selectedFiles, setSelectedFiles } = useContext(selectedFilesArray);
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [isInputOpen, setIsInputOpen] = useState<boolean>(false);
-  const [isbold, setIsbold] = useState<boolean>(false);
+  const [value, setValue] = useState();
+  
   const editMode = useSelector((state: any) => state.ChatSlice.editMode);
   const message = useSelector((state: any) => state.ChatSlice.Message);
   const editIndex = useSelector((state: any) => state.ChatSlice.editIndex);
@@ -98,43 +97,29 @@ const MessageInputSection = (props: any) => {
       {isReplayClicked ? (
         <ReplayInputComponent message={props.message?.text} />
       ) : (
-        <div className={isInputOpen ? "inputOpen" : "inputsection"}>
-          {!isInputOpen&&
+        <div className={props.isInputOpen ? "inputOpen" : "inputsection"}>
+          {!props.isInputOpen&&
+          <MentionsInput value ={value} onChange={(e:any)=>setValue(e.target.value)} >
+            <Mention data={userData}/>
           <input
             type="text"
-            className={`textinput ${isbold ? "boldTextInput" : ""}`}
+            className='textinput' 
             onChange={props.handlechangeMessage}
             placeholder="Type Message..."
             value={props.Message.message}
             onDragOver={(e) => e.preventDefault()}
             onDrop={props.handleFileDrop}
             onKeyDown={handleEnterKeyPress}
-          />}
+          />
+          </MentionsInput>}
 
-          <div /*className={isInputOpen ? "texteditorOpen" : null}*/>
-            {isInputOpen ? (
-              // <div className="textEditor">
-              //   <label onClick={handleBold}>
-              //     <BsTypeBold
-              //       className={`textEditorIcons ${
-              //         isbold ? "textEditorIconsactive" : ""
-              //       }`}
-              //     />
-              //   </label>
-              //   <label>
-              //     <MdOutlineFormatItalic className="textEditorIcons" />
-              //   </label>
-              //   <label>
-              //     <PiTextUnderlineBold className="textEditorIcons" />
-              //   </label>
-              //   <label>
-              //     <DiCode className="textEditorIcons" />
-              //   </label>
-              // </div>
+          <div >
+            {props.isInputOpen ? (
+              
               <TextEditer/>
             ) : null}
             <div>
-              <label onClick={() => setIsInputOpen(!isInputOpen)}>
+              <label onClick={() => props.setIsInputOpen(!props.isInputOpen)}>
                 <MdTextFormat className="customFileInput" />
               </label>
               <label htmlFor="fileInput">
