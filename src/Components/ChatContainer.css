@@ -207,6 +207,18 @@
   justify-content: space-between;
   align-items: center;
 }
+.mentioninputOpen{
+  margin-top: 15px;
+  margin-right: 0px;
+  height: 43px;
+  width: 75%;
+  padding: 5px;
+   
+}
+.mentions__mention strong {
+  font-weight: bold;
+}
+
 .inputOpen {
   border-color: gray;
   border-width: 1px;
@@ -260,7 +272,7 @@
 }
 .menuOptions {
   position: relative;
-  top: 50px;
+  top: 120px;
 }
 
 .texteditContainer {
@@ -272,13 +284,21 @@
   margin: 3px 20px 3px 5px;
   min-width: 140px;
   padding: 3px 9px 5px;
-  position: relative;
+  /* position: absolute; */
   
+}
+.textTime{
+  color: #00000073;
+  display: flex;
+  justify-content: flex-end;
+  font-size: 12px;
+  text-align: right;
 }
 
 .textHead{
   display: flex;
   padding:5px;
+  justify-content:space-between;
 
 }
 .chatname{
@@ -299,4 +319,18 @@
   width: "100%";
  
   border-style:none;
+}
+.mentioninputOpen__input, .mentioninputOpen__input:focus ,
+.mentioninputOpen__input:hover{
+  outline: none;
+  border: none;
+}
+.rmention__suggestions {
+  position: absolute;
+  top: -100%; /* Adjust this value to control the distance from the input */
+  left: 0;
+  right: 0;
+  z-index: 1000; /* Adjust as needed to ensure it's above other elements */
+  max-height: 200px; /* Set a maximum height for the suggestions */
+  overflow-y: auto; /* Enable scrolling if needed */
 }

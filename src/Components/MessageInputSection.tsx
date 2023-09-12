@@ -6,22 +6,22 @@ import Picker from "@emoji-mart/react";
 import "./ChatContainer.css";
 import { selectedFilesArray } from "./Context";
 import { useContext, useEffect, useRef, useState } from "react";
-import {  MdTextFormat } from "react-icons/md";
+import { MdTextFormat } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import ReplayInputComponent from "./ReplayInputComponent";
 import { EditSave, EmojiSelect } from "../ReduxToolkit/ChatSlice";
 import TextEditer from "./TextEditer";
-import { MentionsInput, Mention } from 'react-mentions'
-import userData from '../assets/UserData.json'
+import { MentionsInput, Mention } from "react-mentions";
+import userData from "../assets/UserMentionsData.json";
 
 const MessageInputSection = (props: any) => {
-    const isReplayClicked = useSelector(
+  const isReplayClicked = useSelector(
     (state: any) => state.ChatSlice.ReplayClicked
   );
   const { selectedFiles, setSelectedFiles } = useContext(selectedFilesArray);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [value, setValue] = useState();
-  
+
   const editMode = useSelector((state: any) => state.ChatSlice.editMode);
   const message = useSelector((state: any) => state.ChatSlice.Message);
   const editIndex = useSelector((state: any) => state.ChatSlice.editIndex);
@@ -63,7 +63,7 @@ const MessageInputSection = (props: any) => {
       }
     }
   };
-  
+
   return (
     <div>
       {selectedFiles.length !== 0 ? (
@@ -98,26 +98,25 @@ const MessageInputSection = (props: any) => {
         <ReplayInputComponent message={props.message?.text} />
       ) : (
         <div className={props.isInputOpen ? "inputOpen" : "inputsection"}>
-          {!props.isInputOpen&&
-          <MentionsInput value ={value} onChange={(e:any)=>setValue(e.target.value)} >
-            <Mention data={userData}/>
-          <input
-            type="text"
-            className='textinput' 
-            onChange={props.handlechangeMessage}
-            placeholder="Type Message..."
-            value={props.Message.message}
-            onDragOver={(e) => e.preventDefault()}
-            onDrop={props.handleFileDrop}
-            onKeyDown={handleEnterKeyPress}
-          />
-          </MentionsInput>}
-
-          <div >
-            {props.isInputOpen ? (
+          {!props.isInputOpen && (
+            <MentionsInput
               
-              <TextEditer/>
-            ) : null}
+              placeholder="Type Message..."
+              onKeyDown={(e:any)=>handleEnterKeyPress(e)}
+              className={props.isInputOpen ? "" : "mentioninputOpen"}
+              singleLine
+              value={props.Message.message}
+              onChange={props.handlechangeMessage}
+              onDragOver={(e) => e.preventDefault()}
+              onDrop={props.handleFileDrop}
+            >
+              <Mention markup="<strong>@__id__</strong>" trigger="@" data={userData} />
+             
+            </MentionsInput>
+          )}
+
+          <div>
+            {props.isInputOpen ? <TextEditer /> : null}
             <div>
               <label onClick={() => props.setIsInputOpen(!props.isInputOpen)}>
                 <MdTextFormat className="customFileInput" />

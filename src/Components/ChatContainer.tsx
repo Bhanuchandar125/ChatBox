@@ -8,12 +8,7 @@ import { openedChat, selectedFilesArray } from "./Context";
 import { Avatar, MessageBox } from "react-chat-elements";
 import "react-chat-elements/dist/main.css";
 import MessageOptionsMenu from "./MessageMenu";
-import {
-
-  EditSave,
-  sendMessages,
-  setMessage,
-} from "../ReduxToolkit/ChatSlice";
+import { EditSave, sendMessages, setMessage } from "../ReduxToolkit/ChatSlice";
 import { useDispatch, useSelector } from "react-redux";
 
 
@@ -24,23 +19,21 @@ const ChatContainer = (props: any) => {
   const [editIndex, setEditIndex] = useState<number | null>(null);
   const [editedMessage, setEditedMessage] = useState("");
   const [isInputOpen, setIsInputOpen] = useState<boolean>(false);
-  
 
   const displayMessage = useSelector(
     (state: any) => state.ChatSlice.displaymessages
   );
   const Message = useSelector((state: any) => state.ChatSlice.Message);
-  
+
   const dispatch = useDispatch();
 
   const handleSend = () => {
     if (selectedFiles.length !== 0) {
       dispatch(sendMessages([...selectedFiles]));
       setSelectedFiles([]);
-      
     } else if (Message.message?.trim() !== "") {
       dispatch(sendMessages(Message));
-      setIsInputOpen(false)
+      setIsInputOpen(false);
     }
   };
 
@@ -51,6 +44,7 @@ const ChatContainer = (props: any) => {
 
   const handlechangeMessage = (e: any) => {
     const message = e.target.value;
+
     dispatch(setMessage(message));
   };
 
@@ -63,15 +57,14 @@ const ChatContainer = (props: any) => {
     }
   };
 
-   const htmlText = (message:string)=>{
-    
-    const parser =  new DOMParser()
-    const htmlContent = parser.parseFromString(message,'text/html')
-    
+  const htmlText = (message: string) => {
+    const parser = new DOMParser();
+    const htmlContent = parser.parseFromString(message, "text/html");
+
     const htmlString = htmlContent.documentElement.innerHTML; // Get the HTML content as a string
-   
+
     return htmlString;
-   }
+  };
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFilesArray: any[] = [];
     if (e.target.files) {
@@ -145,10 +138,12 @@ const ChatContainer = (props: any) => {
                       message={each.url}
                       type={each.type}
                       id={index}
+                      className ="messageMenu"
                     />
                   </li>
                 );
               } else if (each.type && each.type.startsWith("image")) {
+                console.log(each.message)
                 return (
                   <li key={index} className="imageContainer">
                     <MessageBox
@@ -162,26 +157,48 @@ const ChatContainer = (props: any) => {
                       }}
                     />
                     <MessageOptionsMenu
-                      message={each.url}
+                      message={each.message}
                       type="image"
                       id={index}
+                      className ="messageMenu"
                     />
                   </li>
+                );
+              } else if (
+                each.message.startsWith("<") ||
+                each.message.includes("@")
+              ) {
+                return (
+                  <>
+                    <div className="  texteditContainer ">
+                      <div className="textHead">
+                        <div className="d-flex ">
+                        <Avatar
+                          alt={openedchat.name}
+                          src={openedchat?.profile_image}
+                        />
+                        <label className="chatname">{openedchat.name}</label>
+                        </div>
+                        <MessageOptionsMenu
+                          Message={each.message}
+                          type="text"
+                          id={index}
+                          
+                        />
+                      </div>
+                      <div
+                        className="chattext"
+                        dangerouslySetInnerHTML={{
+                          __html: htmlText(each.message),
+                        }}
+                      ></div>
+                      <label className="textTime">just now</label>
+                    </div>
+                  </>
                 );
               } else {
                 return (
                   <>
-                  {(each.message.startsWith("<"))?(
-                    <div className="texteditContainer">
-                      <div className="textHead">
-                      <Avatar alt={openedchat.name} src={openedchat?.profile_image} />
-                        <label className="chatname">{openedchat.name}</label>
-                      </div>
-                  <div  className="chattext" dangerouslySetInnerHTML={{
-                    __html: htmlText(each.message)
-                  }}>
-                    </div>
-                  </div>):(
                     <MessageBox
                       key={index}
                       position="right"
@@ -201,17 +218,16 @@ const ChatContainer = (props: any) => {
                           }
                         : {})}
                     />
-                  )}
-                    
                     <MessageOptionsMenu
                       Message={each.message}
                       type="text"
                       id={index}
+                      className ="messageMenu"
                     />
                   </>
                 );
               }
-            })}{" "}
+            })}
         </ul>
       </div>
 

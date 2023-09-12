@@ -21,11 +21,9 @@ const ChatSlice = createSlice({
   initialState,
   reducers: {
     Replay(state, action) {
-      // console.log("Replay",action.payload)
+      console.log("Replay",action.payload)
       const { Id, Message } = action.payload;
       state.ReplayMessage=action.payload
-      
-      
       state.ReplayClicked = true;
     },
     Edit(state, action) {
