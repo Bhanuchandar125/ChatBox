@@ -71,7 +71,7 @@ const Message = useSelector((state:any)=>state.ChatSlice.Message)
           <img
             src={Replaymessage.Message}
             alt={`Uploaded`}
-            className="imageContainer"
+            className="imageContainer imageSize"
           />
         ) : (
           <MessageBox

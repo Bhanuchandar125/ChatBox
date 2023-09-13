@@ -27,6 +27,7 @@ const ChatSlice = createSlice({
       state.ReplayClicked = true;
     },
     Edit(state, action) {
+      // console.log(action.payload)
       state.editMode= true
       state.editIndex= action.payload.Id     
       state.Message.message =  action.payload.Message

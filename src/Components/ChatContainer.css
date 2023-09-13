@@ -182,8 +182,12 @@
   list-style: none;
   background-color: none;
   border-radius: 10px;
-  text-align: end;
+  text-align: start;
   margin: 10px;
+}
+.imageSize{
+  height:100px;
+  width:auto;
 }
 .selectedFilesContainer {
   display: flex;
@@ -261,9 +265,9 @@
   font-weight: bold;
 }
 .messageMenu {
-  position: relative;
-  bottom: 80px;
-  right: 20px;
+  position: absolute;
+  top: 10px;
+  right: 23px;
   cursor: pointer;
 }
 .messageMenu:hover {
@@ -281,7 +285,7 @@
   float: right;
   background: #fff;
   box-shadow: 1px 1px 1px 1px #0003;
-  margin: 3px 20px 3px 5px;
+  margin: 3px 30px 3px 5px;
   min-width: 140px;
   padding: 3px 9px 5px;
   /* position: absolute; */

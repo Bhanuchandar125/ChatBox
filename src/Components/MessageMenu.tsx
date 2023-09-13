@@ -25,12 +25,12 @@ export default function MessageOptionsMenu(props: any) {
   };
 
   const handleMenu = (el: any) => {
-    //  console.log("message", props.message)
+     console.log("message", props.Message)
     const actionCreator = actionMap[el.title];
     if (typeof actionCreator === "function") {
       dispatch(
         actionCreator({
-          Message: props.message,
+          Message: props.Message,
           Id: props.id,
           action: el.title,
           prevmsgType: props.type,

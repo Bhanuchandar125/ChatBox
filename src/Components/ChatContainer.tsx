@@ -11,7 +11,6 @@ import MessageOptionsMenu from "./MessageMenu";
 import { EditSave, sendMessages, setMessage } from "../ReduxToolkit/ChatSlice";
 import { useDispatch, useSelector } from "react-redux";
 
-
 const ChatContainer = (props: any) => {
   const { selectedFiles, setSelectedFiles } = useContext(selectedFilesArray);
   const [openedchat, setOpenedchat] = useState<any>({});
@@ -99,6 +98,19 @@ const ChatContainer = (props: any) => {
     setSelectedFiles([...selectedFiles, ...selectedFilesArray]);
   };
 
+  function parseMessage(message: any) {
+    const parts = message.split(/(<[^>]+>)/g);
+    return parts.map((part: any, index: number) => {
+      if (part.startsWith("<") && part.endsWith(">")) {
+        return React.createElement("strong", {
+          dangerouslySetInnerHTML: { __html: part },
+        });
+      }
+      return  (part + " ");
+      
+    });
+  }
+
   return (
     <div className="chatContainer">
       <div className="chatHeader">
@@ -123,6 +135,7 @@ const ChatContainer = (props: any) => {
         <ul className="listcontainer">
           {displayMessage &&
             displayMessage.map((each: any, index: number) => {
+              // {console.log(each)}
               if (each.type && each.type.startsWith("video")) {
                 return (
                   <li className="videoContainer" key={index}>
@@ -135,15 +148,15 @@ const ChatContainer = (props: any) => {
                       }}
                     />
                     <MessageOptionsMenu
-                      message={each.url}
+                      Message={each.url}
                       type={each.type}
                       id={index}
-                      className ="messageMenu"
+                      className="messageMenu"
                     />
                   </li>
                 );
               } else if (each.type && each.type.startsWith("image")) {
-                console.log(each.message)
+                console.log(each.message);
                 return (
                   <li key={index} className="imageContainer">
                     <MessageBox
@@ -157,10 +170,10 @@ const ChatContainer = (props: any) => {
                       }}
                     />
                     <MessageOptionsMenu
-                      message={each.message}
+                      Message={each.message}
                       type="image"
                       id={index}
-                      className ="messageMenu"
+                      className="messageMenu"
                     />
                   </li>
                 );
@@ -168,37 +181,66 @@ const ChatContainer = (props: any) => {
                 each.message.startsWith("<") ||
                 each.message.includes("@")
               ) {
+                const messageText = each.message;
+                {console.log(parseMessage(messageText))}
                 return (
-                  <>
-                    <div className="  texteditContainer ">
-                      <div className="textHead">
-                        <div className="d-flex ">
-                        <Avatar
-                          alt={openedchat.name}
-                          src={openedchat?.profile_image}
-                        />
-                        <label className="chatname">{openedchat.name}</label>
-                        </div>
-                        <MessageOptionsMenu
-                          Message={each.message}
-                          type="text"
-                          id={index}
-                          
-                        />
-                      </div>
-                      <div
-                        className="chattext"
-                        dangerouslySetInnerHTML={{
-                          __html: htmlText(each.message),
-                        }}
-                      ></div>
-                      <label className="textTime">just now</label>
-                    </div>
-                  </>
+                  // <>
+                  //   <div className="  texteditContainer ">
+                  //     <div className="textHead">
+                  //       <div className="d-flex ">
+                  //       <Avatar
+                  //         alt={openedchat.name}
+                  //         src={openedchat?.profile_image}
+                  //       />
+                  //       <label className="chatname">{openedchat.name}</label>
+                  //       </div>
+                  //       <MessageOptionsMenu
+                  //         Message={each.message}
+                  //         type="text"
+                  //         id={index}
+
+                  //       />
+                  //     </div>
+                  //     <div
+                  //       className="chattext"
+                  //       dangerouslySetInnerHTML={{
+                  //         __html: htmlText(each.message),
+                  //       }}
+                  //     ></div>
+                  //     <label className="textTime">just now</label>
+                  //   </div>
+                  // </>
+                  <li key={index} className="imageContainer">
+                    <MessageBox
+                      key={index}
+                      position="right"
+                      title={openedchat.name}
+                      type="text"
+                      text={parseMessage(each.message)}
+                      date={new Date()}
+                      replyButton={false}
+                      avatar={openedchat?.profile_image}
+                      {...(each.prevMessage.trim() !== ""
+                        ? {
+                            reply: {
+                              title: openedchat.name,
+                              titleColor: "#8717ae",
+                              message: each.prevMessage,
+                            },
+                          }
+                        : {})}
+                    />
+                    <MessageOptionsMenu
+                      Message={each.message}
+                      type="text"
+                      id={index}
+                      className="messageMenu"
+                    />
+                  </li>
                 );
               } else {
                 return (
-                  <>
+                  <li key={index} className="imageContainer">
                     <MessageBox
                       key={index}
                       position="right"
@@ -218,13 +260,14 @@ const ChatContainer = (props: any) => {
                           }
                         : {})}
                     />
+
                     <MessageOptionsMenu
                       Message={each.message}
                       type="text"
                       id={index}
-                      className ="messageMenu"
+                      className="messageMenu"
                     />
-                  </>
+                  </li>
                 );
               }
             })}
