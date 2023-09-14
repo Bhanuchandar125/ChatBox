@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import "./ChatContainer.css";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { ExpandMore } from "@mui/icons-material";
-import { BiVideo } from "react-icons/bi";
+import { FcVideoCall } from "react-icons/fc";
 import MessageInputSection from "./MessageInputSection";
 import { openedChat, selectedFilesArray } from "./Context";
 import { Avatar, MessageBox } from "react-chat-elements";
@@ -23,6 +23,9 @@ const ChatContainer = (props: any) => {
     (state: any) => state.ChatSlice.displaymessages
   );
   const Message = useSelector((state: any) => state.ChatSlice.Message);
+  const [focusedMessageindex, setFocusedmessageindex] = useState<number | null>(
+    null
+  );
 
   const dispatch = useDispatch();
 
@@ -99,16 +102,27 @@ const ChatContainer = (props: any) => {
   };
 
   function parseMessage(message: any) {
-    const parts = message.split(/(<[^>]+>)/g);
-    return parts.map((part: any, index: number) => {
-      if (part.startsWith("<") && part.endsWith(">")) {
-        return React.createElement("strong", {
-          dangerouslySetInnerHTML: { __html: part },
-        });
-      }
-      return  (part + " ");
-      
-    });
+    if (message.includes("@")) {
+      const parts = message.split(" ");
+      return parts.map((part: any, index: number) => {
+        if (part.startsWith("<") && part.endsWith(">")) {
+          return React.createElement("strong", {
+            dangerouslySetInnerHTML: { __html: part },
+          });
+        }
+        return part + " ";
+      });
+    } else {
+      const parts = message.split("/(<[^>]+>)/");
+      return parts.map((part: any, index: number) => {
+        if (part.startsWith("<") && part.endsWith(">")) {
+          return React.createElement("span", {
+            dangerouslySetInnerHTML: { __html: part },
+          });
+        }
+        return part + " ";
+      });
+    }
   }
 
   return (
@@ -128,7 +142,7 @@ const ChatContainer = (props: any) => {
           <ExpandMore />
         </div>
 
-        <BiVideo className="videoIcon" />
+        <FcVideoCall className="videoIcon" />
       </div>
       <hr />
       <div className="chatBody">
@@ -138,7 +152,14 @@ const ChatContainer = (props: any) => {
               // {console.log(each)}
               if (each.type && each.type.startsWith("video")) {
                 return (
-                  <li className="videoContainer" key={index}>
+                  <li
+                    className="videoContainer"
+                    onFocus={() => setFocusedmessageindex(index)}
+                    onBlur={() => setFocusedmessageindex(null)}
+                    onMouseEnter={() => setFocusedmessageindex(index)}
+                    onMouseLeave={() => setFocusedmessageindex(null)}
+                    key={index}
+                  >
                     <MessageBox
                       position={"right"}
                       type={"video"}
@@ -147,18 +168,27 @@ const ChatContainer = (props: any) => {
                         uri: each.message,
                       }}
                     />
-                    <MessageOptionsMenu
-                      Message={each.url}
-                      type={each.type}
-                      id={index}
-                      className="messageMenu"
-                    />
+                    {focusedMessageindex === index && (
+                      <MessageOptionsMenu
+                        Message={each.url}
+                        type={each.type}
+                        id={index}
+                        className="messageMenu"
+                      />
+                    )}
                   </li>
                 );
               } else if (each.type && each.type.startsWith("image")) {
                 console.log(each.message);
                 return (
-                  <li key={index} className="imageContainer">
+                  <li
+                    key={index}
+                    className="imageContainer"
+                    onMouseEnter={() => setFocusedmessageindex(index)}
+                    onMouseLeave={() => setFocusedmessageindex(null)}
+                    onFocus={() => setFocusedmessageindex(index)}
+                    onBlur={() => setFocusedmessageindex(null)}
+                  >
                     <MessageBox
                       position={"right"}
                       type={"photo"}
@@ -169,12 +199,14 @@ const ChatContainer = (props: any) => {
                         width: 300,
                       }}
                     />
-                    <MessageOptionsMenu
-                      Message={each.message}
-                      type="image"
-                      id={index}
-                      className="messageMenu"
-                    />
+                    {focusedMessageindex === index && (
+                      <MessageOptionsMenu
+                        Message={each.message}
+                        type="text"
+                        id={index}
+                        className="messageMenu"
+                      />
+                    )}
                   </li>
                 );
               } else if (
@@ -182,7 +214,9 @@ const ChatContainer = (props: any) => {
                 each.message.includes("@")
               ) {
                 const messageText = each.message;
-                {console.log(parseMessage(messageText))}
+                {
+                  console.log(parseMessage(messageText));
+                }
                 return (
                   // <>
                   //   <div className="  texteditContainer ">
@@ -210,7 +244,14 @@ const ChatContainer = (props: any) => {
                   //     <label className="textTime">just now</label>
                   //   </div>
                   // </>
-                  <li key={index} className="imageContainer">
+                  <li
+                    key={index}
+                    className="imageContainer"
+                    onFocus={() => setFocusedmessageindex(index)}
+                    onBlur={() => setFocusedmessageindex(null)}
+                    onMouseEnter={() => setFocusedmessageindex(index)}
+                    onMouseLeave={() => setFocusedmessageindex(null)}
+                  >
                     <MessageBox
                       key={index}
                       position="right"
@@ -230,17 +271,26 @@ const ChatContainer = (props: any) => {
                           }
                         : {})}
                     />
-                    <MessageOptionsMenu
-                      Message={each.message}
-                      type="text"
-                      id={index}
-                      className="messageMenu"
-                    />
+                    {focusedMessageindex === index && (
+                      <MessageOptionsMenu
+                        Message={each.message}
+                        type="text"
+                        id={index}
+                        className="messageMenu"
+                      />
+                    )}
                   </li>
                 );
               } else {
                 return (
-                  <li key={index} className="imageContainer">
+                  <li
+                    key={index}
+                    className="imageContainer"
+                    onFocus={() => setFocusedmessageindex(index)}
+                    onBlur={() => setFocusedmessageindex(null)}
+                    onMouseEnter={() => setFocusedmessageindex(index)}
+                    onMouseLeave={() => setFocusedmessageindex(null)}
+                  >
                     <MessageBox
                       key={index}
                       position="right"
@@ -261,12 +311,14 @@ const ChatContainer = (props: any) => {
                         : {})}
                     />
 
-                    <MessageOptionsMenu
-                      Message={each.message}
-                      type="text"
-                      id={index}
-                      className="messageMenu"
-                    />
+                    {focusedMessageindex === index && (
+                      <MessageOptionsMenu
+                        Message={each.message}
+                        type="text"
+                        id={index}
+                        className="messageMenu"
+                      />
+                    )}
                   </li>
                 );
               }

@@ -64,6 +64,7 @@ const MessageInputSection = (props: any) => {
     }
   };
 
+  
   return (
     <div>
       {selectedFiles.length !== 0 ? (
@@ -100,7 +101,6 @@ const MessageInputSection = (props: any) => {
         <div className={props.isInputOpen ? "inputOpen" : "inputsection"}>
           {!props.isInputOpen && (
             <MentionsInput
-              
               placeholder="Type Message..."
               onKeyDown={(e:any)=>handleEnterKeyPress(e)}
               className={props.isInputOpen ? "" : "mentioninputOpen"}

@@ -18,9 +18,14 @@ function Header() {
 
   const handleLogout = () => {
     localStorage.removeItem("user");
+    localStorage.clear();
     setIslogin(false);
     navigate("/login");
   };
+  const handleSearch=(e:any)=>{
+    const value = e.target.value
+    console.log(value)
+  }
   return (
     <div className="container-fluid">
       <div className="row">
@@ -61,6 +66,7 @@ function Header() {
               placeholder="Find People, Spaces and meets"
               className="searchbar me-2"
               aria-label="Search"
+              onChange={handleSearch}
             />
             <Button variant="success">Search</Button>
           </Form>

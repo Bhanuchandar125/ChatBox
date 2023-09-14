@@ -10,17 +10,31 @@ import SimpleBar from 'simplebar-react';
 import 'simplebar-react/dist/simplebar.min.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { openedChat } from './Context';
+import Form from "react-bootstrap/Form";
+import Button from "react-bootstrap/Button";
+import InitialChatcontainer from './InitialChatcontainer';
 
 
 const Body = () => {
  
   const [chatClicked, setChatClicked] = useState<boolean>(false)
   const {openChat, setOpenChat} = useContext(openedChat)
+  const [chatList, setChatlist] = useState(data)
+  const [search, setSearch] = useState ("")
 
   const handleopenchat = (chat:any)=>{
    
     setOpenChat(chat) 
     localStorage.setItem("openedchat", JSON.stringify(chat))
+    setChatlist(data)
+    setSearch("")
+  }
+  const handleSearch=(e:any)=>{
+    setSearch(e.target.value)
+    const filteredData = data.filter((each)=>each.name.toLowerCase().includes(e.target.value))
+    console.log(filteredData)
+    setChatlist(filteredData)
+    setChatClicked(true)
   }
   const scrollableNodeRef = React.createRef();
   return (
@@ -28,11 +42,22 @@ const Body = () => {
       <div className='row'>
       <div className='appContainer  '>
         <div className='col-md-3  sideSection '>
+        <Form >
+            <Form.Control
+              type="search"
+              placeholder="Find People, Spaces and meets"
+              className="searchbar me-2"
+              aria-label="Search"
+              onChange={handleSearch}
+              value={search}
+            />
+           
+          </Form>
           <div className={chatClicked?"sideSection_item_clicked":"sideSection_item"} onClick={()=>setChatClicked(!chatClicked)}>
             <BsChatRightText className="sideSection_icon" /> 
             <span className='sideSection_text'>Chat</span><ExpandMoreIcon className="expandmore"/>
             {chatClicked ? (
-            data.map((each: any, index:number) => (
+            chatList.map((each: any, index:number) => (
              
               <ChatList
                 key={index} 
@@ -67,8 +92,15 @@ const Body = () => {
           </div>
         </div>
         <div className=' col-md-9 mainSection '>
+          {localStorage.getItem("openedchat")?(
             <ChatContainer
             user={openChat}/>
+          ):(
+            <div>
+              <InitialChatcontainer/>
+            </div>
+          )}
+            
         </div>
       </div>
       </div>
