@@ -3,7 +3,6 @@ import {userGlobalContext} from '../Components/Context';
 import { useContext } from "react";
 import Config from '../Components/Config';
 
-
 // const { setUsers} = useContext(userGlobalContext)
 
 export const getAllUsers = async()=>{
@@ -20,7 +19,6 @@ export const getAllUsers = async()=>{
         return errors.message
     };
 }
-
 export const loginUser = async (data:any)=>{
     try{
         const res = await axios({
@@ -31,5 +29,33 @@ export const loginUser = async (data:any)=>{
           return res.data
     }catch(error){
         return error
+    }
+}
+export const postRequest = async (url:any, body:any)=>{
+    try{
+        const response = await axios({
+            method:"POST",
+            url:url,
+            data:body
+        });
+        const data = response.data
+        return data
+    }catch(error){
+        let message = error
+        return {error:true, message}
+    }
+} 
+
+export const getRequest = async(url:string)=>{
+    try{
+        const response = await axios({
+            method:"GET",
+            url:url
+        });
+        const data = response.data
+        return data
+    }catch(error){
+        let message = error
+        return {error:true, message}
     }
 }
