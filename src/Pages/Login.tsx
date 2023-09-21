@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useContext } from "react";
 import { loginUser } from "../apiCalls/UserCalls";
-import { AuthUser, userloginstatus } from "../Components/Context";
+import { Authuser, openedChat, userloginstatus } from "../Components/Context";
 
 const schema = yup
   .object({
@@ -27,7 +27,8 @@ const schema = yup
 
 const Login = () => {
   const { islogin, setIslogin } = useContext(userloginstatus);
-  const {loginuser, setLoginuser} = useContext(AuthUser)
+  
+  const {setLoginuser} = useContext(Authuser)
   const navigate = useNavigate();
   const {
     register,
@@ -38,10 +39,9 @@ const Login = () => {
   const onSubmit = async (values: any) => {
     const users: any = await loginUser(values);
     setLoginuser(users)
-    console.log(users)
+    setIslogin(true);
     localStorage.setItem("user", users.token);
     alert("login successfully completed");
-    setIslogin(true);
     reset();
   };
 

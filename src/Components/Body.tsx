@@ -9,10 +9,12 @@ import  data from '../assets/UserData.json';
 import SimpleBar from 'simplebar-react';
 import 'simplebar-react/dist/simplebar.min.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { openedChat } from './Context';
+import { Authuser, openedChat } from './Context';
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import InitialChatcontainer from './InitialChatcontainer';
+import { ChatContext } from '../Context/ChatContext';
+import { useFetchReciepient } from '../Hooks/useFetchReciepient';
 
 
 const Body = () => {
@@ -21,6 +23,15 @@ const Body = () => {
   const {openChat, setOpenChat} = useContext(openedChat)
   const [chatList, setChatlist] = useState(data)
   const [search, setSearch] = useState ("")
+  const {loginuser} = useContext(Authuser)
+
+  const {userChats, isuserChatsLoading, userChatsError, potentialChats} = useContext(ChatContext)
+  
+  
+  const {reciepient} = useFetchReciepient(userChats, loginuser)
+
+  console.log(potentialChats)
+  console.log("reciepient",reciepient)
 
   const handleopenchat = (chat:any)=>{
    
@@ -65,8 +76,8 @@ const Body = () => {
                 dataSource={[
                   {
                     avatar: each.profile_image,
-                    alt: 'kursat_avatar',
-                    title: each.name,
+                    alt: reciepient.name,
+                    title: reciepient.name,
                     subtitle: each.recent_message,
                     date: each.last_message_Date,
                     unread: 3,
@@ -94,7 +105,8 @@ const Body = () => {
         <div className=' col-md-9 mainSection '>
           {localStorage.getItem("openedchat")?(
             <ChatContainer
-            user={openChat}/>
+            user={loginuser}
+            chat= {userChats}/>
           ):(
             <div>
               <InitialChatcontainer/>

@@ -10,8 +10,11 @@ import "react-chat-elements/dist/main.css";
 import MessageOptionsMenu from "./MessageMenu";
 import { EditSave, sendMessages, setMessage } from "../ReduxToolkit/ChatSlice";
 import { useDispatch, useSelector } from "react-redux";
+import { useFetchReciepient } from "../Hooks/useFetchReciepient";
 
 const ChatContainer = (props: any) => {
+console.log("props", props)
+  
   const { selectedFiles, setSelectedFiles } = useContext(selectedFilesArray);
   const [openedchat, setOpenedchat] = useState<any>({});
   const { openChat } = useContext(openedChat);

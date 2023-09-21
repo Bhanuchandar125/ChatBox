@@ -2,7 +2,12 @@ import "./App.css";
 import "../src/index.css";
 import AppRoutes from "./Routes/AppRoutes";
 import { useContext, useState } from "react";
-import { AuthUser, Message, userloginstatus } from "../src/Components/Context";
+import {
+  
+  AuthUserProvider,
+  Message,
+  userloginstatus,
+} from "../src/Components/Context";
 import {
   selectedFilesArray,
   sentMessagesArray,
@@ -16,30 +21,28 @@ function App() {
   const [islogin, setIslogin] = useState<boolean>(false);
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [sentmessages, setSentMessages] = useState([]);
-  const [openChat, setOpenChat] = useState({});
+  const [openChat, setOpenChat] = useState()
   const [message, setMessage] = useState<any>({
-    Message:"",
-    type:""
-  })
-  const [loginuser, setLoginuser] = useState<any>({})
-  // const {loginuser} = useContext(AuthUser)
-  // console.log("userfromapp", loginuser)
+    Message: "",
+    type: "",
+  });
+
   return (
-    <ChatContextProvider>
+    <AuthUserProvider>
       <selectedFilesArray.Provider value={{ selectedFiles, setSelectedFiles }}>
         <userloginstatus.Provider value={{ islogin, setIslogin }}>
           <sentMessagesArray.Provider value={{ sentmessages, setSentMessages }}>
             <openedChat.Provider value={{ openChat, setOpenChat }}>
-              <Message.Provider value={{message, setMessage}}>
-                <AuthUser.Provider value ={{loginuser, setLoginuser}}>
-                <AppRoutes />
-                </AuthUser.Provider>
+              <Message.Provider value={{ message, setMessage }}>
+                <ChatContextProvider>
+                  <AppRoutes />
+                </ChatContextProvider>
               </Message.Provider>
             </openedChat.Provider>
           </sentMessagesArray.Provider>
         </userloginstatus.Provider>
       </selectedFilesArray.Provider>
-    </ChatContextProvider>
+    </AuthUserProvider>
   );
 }
 

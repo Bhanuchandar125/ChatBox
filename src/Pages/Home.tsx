@@ -1,13 +1,11 @@
 import React, { useContext } from 'react'
 import Body from '../Components/Body'
 import Header from '../Components/Header'
-import { AuthUser } from '../Components/Context'
+import { ChatContext } from '../Context/ChatContext'
 
 const Home = () => {
   const user = localStorage.getItem("user")
-  const {userChats, isuserChatsLoading, userChatsError} = useContext(AuthUser)
-  console.log(userChats)
-
+  
   return (
     <div className='homeBg'>
         <Header/>
