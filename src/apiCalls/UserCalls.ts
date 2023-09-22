@@ -19,19 +19,20 @@ export const getAllUsers = async()=>{
         return errors.message
     };
 }
-export const loginUser = async (data:any)=>{
-    try{
-        const res = await axios({
-            method: "Post",
-            url: Config.loginapi ,
-            data: data,
-          });
-          return res.data
-    }catch(error){
-        return error
-    }
-}
+// export const loginUser = async (data:any)=>{
+//     try{
+//         const res = await axios({
+//             method: "Post",
+//             url: Config.loginapi ,
+//             data: data,
+//           });
+//           return res.data
+//     }catch(error){
+//         return error
+//     }
+// }
 export const postRequest = async (url:any, body:any)=>{
+    
     try{
         const response = await axios({
             method:"POST",

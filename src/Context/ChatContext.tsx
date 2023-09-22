@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useCallback, useContext, useEffect, useState } from "react";
 import { getRequest, postRequest } from "../apiCalls/UserCalls";
 import Config from "../Components/Config";
 import {  Authuser, openedChat } from "../Components/Context";
@@ -7,7 +7,7 @@ export const ChatContext = createContext();
 
 export const ChatContextProvider = ({ children}) => {
 
-  const [userChats, setUserChats] = useState(null);
+  const [userChats, setUserChats] = useState<null|any>([]);
   const [isuserChatsLoading, setisUserChatsLoading] = useState<any>(null);
   const [userChatsError, setUserChatsError] = useState(null);
   const {openChat} = useContext(openedChat)
@@ -35,6 +35,15 @@ export const ChatContextProvider = ({ children}) => {
     };
     getusers();
   },[userChats])
+
+  const createChat= useCallback(async(firstID, secondId)=>{
+    const response = await postRequest(`${Config.createchatapi}`, JSON.stringify({firstID, secondId}));
+    if(response.error){
+      console.log("Error creatingChat", response)
+    };
+    setUserChats((prev:any)=>[...prev, response[0]]);
+    
+},[])
  
 useEffect(()=>{
     const getUserChats = async()=>{
@@ -48,16 +57,17 @@ useEffect(()=>{
               return setUserChatsError(response)
 
             }
-            
+            console.log(response[0])
             setUserChats(response[0])
         }
     }
     getUserChats()
 },[openChat])
-// console.log(userChats)
+// console.log("userChats", userChats)
+// console.log("potentialChats", potentialChats)
   return (
     <ChatContext.Provider
-      value={{userChats, isuserChatsLoading, userChatsError,potentialChats}}
+      value={{userChats,createChat, isuserChatsLoading, userChatsError,potentialChats}}
     >
       {children}
     </ChatContext.Provider>

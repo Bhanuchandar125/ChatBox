@@ -54,15 +54,18 @@
   width: auto;
   margin-right: 10px;
   transition: color 0.3s;
+  position: relative;
 }
 .sideSection_text {
   cursor: pointer;
 }
 .sideSection_item {
   cursor: pointer;
+  display: flex;
+  justify-content: space-between;
 }
 .sideSection_item:hover {
-  transform: scale(1.2);
+  transform: scale(1.05);
   color: green;
 }
 .sideSection_item_clicked{
@@ -77,7 +80,43 @@
 .expandmore {
   display: none;
 }
-
-
-
-
+.addIcon{
+  align-items: flex-end;
+  /* cursor: pointer; */
+  margin-top: 20px;
+  margin-bottom: 20px;
+  height: 22px;
+  width: auto;
+  margin-right: 10px;
+  transition: color 0.3s;
+}
+.addIcon:hover{
+  color:blue;
+  background-color:gray;
+  border-radius: 50%;
+  
+}
+.potentialusers{
+  background-color:aliceblue;
+  border-radius: 8px;
+  padding:10px;
+  min-width:200px;
+  position: absolute; /* Use absolute positioning for potential users */
+  left: 350px;
+  top: 150px;
+  max-height: 50vh;
+  overflow-y: scroll;
+}
+.potentialchatcard{
+  display:flex;
+  justify-content:start;
+  margin:15px;
+  padding:5px
+}
+.potentialchatcard:hover{
+  background-color:antiquewhite;
+  cursor: pointer;
+}
+.potentialchatcard>label{
+  margin:10px
+}

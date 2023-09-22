@@ -4,8 +4,9 @@ import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useContext } from "react";
-import { loginUser } from "../apiCalls/UserCalls";
+import { postRequest } from "../apiCalls/UserCalls";
 import { Authuser, openedChat, userloginstatus } from "../Components/Context";
+import Config from "../Components/Config";
 
 const schema = yup
   .object({
@@ -27,8 +28,8 @@ const schema = yup
 
 const Login = () => {
   const { islogin, setIslogin } = useContext(userloginstatus);
-  
-  const {setLoginuser} = useContext(Authuser)
+
+  const { setLoginuser } = useContext(Authuser);
   const navigate = useNavigate();
   const {
     register,
@@ -37,19 +38,24 @@ const Login = () => {
     reset,
   } = useForm({ resolver: yupResolver(schema) });
   const onSubmit = async (values: any) => {
-    const users: any = await loginUser(values);
-    setLoginuser(users)
-    setIslogin(true);
-    localStorage.setItem("user", users.token);
-    alert("login successfully completed");
+    const response = await postRequest(`${Config.loginapi}`, values);
+    
+    if (response.error) {
+      alert("Invalid Email/Password");
+    } else {
+      setLoginuser(response);
+      setIslogin(true);
+      localStorage.setItem("user", response.token);
+      alert("login successfully completed");
+    }
+
     reset();
   };
 
   useEffect(() => {
-    if (islogin) {  
+    if (islogin) {
       setTimeout(() => {
         navigate("/");
-        
       }, 2000);
     }
   }, [islogin, navigate]);

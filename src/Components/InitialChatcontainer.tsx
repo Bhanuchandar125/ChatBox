@@ -1,9 +1,12 @@
-import React from "react";
+import React, { useContext } from "react";
+import { Authuser } from "./Context";
 
 function InitialChatcontainer() {
+  const {loginuser} = useContext(Authuser)
+  
   return (
     <div className="chatHeading">
-      <h1>welcome, Bhanu</h1>
+      <h1>welcome, {loginuser.name}!</h1>
       <p>Ready? Set. Chat! Let's jump right into things.</p>
       <div className="d-flex chatImages">
         <div>

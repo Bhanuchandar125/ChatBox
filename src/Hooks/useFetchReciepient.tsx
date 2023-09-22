@@ -4,7 +4,7 @@ import { getRequest } from "../apiCalls/UserCalls";
 
 
 export const useFetchReciepient =(chat:any, user:any)=>{
-   console.log(chat, user)
+//    console.log(chat, user)
     const [reciepient, setReciepient] = useState(null);
     const [error, setError] = useState(null)
     
@@ -22,6 +22,6 @@ export const useFetchReciepient =(chat:any, user:any)=>{
         }
         getuser();
     }, []);
-console.log(reciepient)
+// console.log(reciepient)
     return {reciepient}
 }
