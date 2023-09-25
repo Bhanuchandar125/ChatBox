@@ -6,7 +6,9 @@ const Config:any={
     finduserapi : import.meta.env.VITE_APP_FINDUSER,
     createchatapi: import.meta.env.VITE_APP_CREATECHAT,
     getuserchatapi: import.meta.env.VITE_APP_GETUSERCHAT,
-    getchatsapi:import.meta.env.VITE_APP_GETCHAT 
+    getchatsapi:import.meta.env.VITE_APP_GETCHAT,
+    getmessagesapi:import.meta.env.VITE_APP_GETMESSAGES,
+    createmessageapi:import.meta.env.VITE_APP_CREATEMESSAGE
 }
 
 export default Config

@@ -9,7 +9,7 @@ import { Authuser } from "./Context";
 const PotentialUsers = () => {
   const { userChats,createChat, potentialChats } = useContext(ChatContext);
   const [dialogueOpen, setDialogueopen] = useState(false);
-  const [selectedUser, setSelecteduser] = useState(null)
+  const [selectedUser, setSelecteduser] = useState<any>(null)
   const {loginuser} = useContext(Authuser)
 
   const clickOnPotentialuser = (chat:any) => {
@@ -29,7 +29,7 @@ const PotentialUsers = () => {
   createChat(firstId, secondId)
   setSelecteduser(null)
  }
- console.log("userChats", userChats)
+ console.log("selectedUser", selectedUser)
   return (
     <div>
       <div className="potentialusers">

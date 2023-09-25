@@ -13,9 +13,8 @@ import { Authuser, openedChat } from "./Context";
 import Form from "react-bootstrap/Form";
 import InitialChatcontainer from "./InitialChatcontainer";
 import { ChatContext } from "../Context/ChatContext";
-import { useFetchReciepient } from "../Hooks/useFetchReciepient";
-
 import PotentialUsers from "./PotentialUsers";
+import Chat from "./chat";
 
 const Body = () => {
   const [chatClicked, setChatClicked] = useState<boolean>(false);
@@ -25,13 +24,11 @@ const Body = () => {
   const { loginuser } = useContext(Authuser);
   const [addbtnclicked, setAddbtnclicked] = useState(false);
 
-  const { userChats, isuserChatsLoading, userChatsError, potentialChats } =
+  const { userChats,messages, isuserChatsLoading, userChatsError, potentialChats } =
     useContext(ChatContext);
 
-  const { reciepient } = useFetchReciepient(userChats, loginuser);
-
-  // console.log(potentialChats);
-  // console.log("reciepient",reciepient)
+  console.log("userChats",userChats);
+  console.log("messages", messages)
 
   const handleopenchat = (chat: any) => {
     setOpenChat(chat);
@@ -42,7 +39,7 @@ const Body = () => {
   const handleSearch = (e: any) => {
     setSearch(e.target.value);
     const filteredData = data.filter((each) =>
-      each.name.toLowerCase().includes(e.target.value)
+      each?.name.toLowerCase().includes(e.target.value)
     );
     console.log(filteredData);
     setChatlist(filteredData);
@@ -75,22 +72,9 @@ const Body = () => {
                 <ExpandMoreIcon className="expandmore" />
 
                 {chatClicked
-                  ? chatList.map((each: any, index: number) => (
-                      <ChatList
-                        key={index}
-                        className="chat-list"
-                        dataSource={[
-                          {
-                            avatar: each.profile_image,
-                            alt: reciepient.name,
-                            title: reciepient.name,
-                            subtitle: each.recent_message,
-                            date: each.last_message_Date,
-                            unread: 3,
-                          },
-                        ]}
-                        onClick={() => handleopenchat(each)}
-                      />
+                  ?isuserChatsLoading && <p>ChatList Loading...</p> || userChats?.map((chat: any, index: number) => (
+                    <Chat key={index} chat={chat} user={loginuser} handleopenchat={handleopenchat}/>
+                      
                     ))
                   : null}
               </div>

@@ -13,6 +13,10 @@ export const ChatContextProvider = ({ children}) => {
   const {openChat} = useContext(openedChat)
   const {loginuser} = useContext(Authuser)
   const [potentialChats, setPotentialchats] = useState([])
+  const [messages, setMessages] = useState<any>(null)
+  const [isMessagesLoading, setisMessagesLoading] = useState<any>(null)
+  const [messagesError, setmessagesError]= useState<any>(null)
+  const [currentChat, setCurrentchat]= useState<any>(null)
 
 
   useEffect(()=>{
@@ -26,7 +30,7 @@ export const ChatContextProvider = ({ children}) => {
         if(loginuser._id===u._id) return false;
         if (userChats){
           isChatcreated= (userChats as any[])?.some((chat:any)=>{
-            return chat.members[0]===u._id||chat?.members[1]===u._id
+            return chat?.members[0]===u._id||chat?.members[1]===u._id
           });
         }
         return !isChatcreated;
@@ -34,40 +38,57 @@ export const ChatContextProvider = ({ children}) => {
       setPotentialchats(pChats);
     };
     getusers();
-  },[userChats])
+  },[])
 
-  const createChat= useCallback(async(firstID, secondId)=>{
-    const response = await postRequest(`${Config.createchatapi}`, JSON.stringify({firstID, secondId}));
+  const createChat= useCallback(async(firstId, secondId)=>{
+    
+    const response = await postRequest(`${Config.createchatapi}`, ({firstId, secondId}));
     if(response.error){
       console.log("Error creatingChat", response)
     };
-    setUserChats((prev:any)=>[...prev, response[0]]);
+    console.log(response)
+    setUserChats([...userChats, response]);
+    getUserChats()
     
 },[])
- 
-useEffect(()=>{
-    const getUserChats = async()=>{
-        if(loginuser?._id){
-          setisUserChatsLoading(true )
-          setUserChatsError(null)
-            const response = await getRequest(`${Config.getuserchatapi}/${loginuser?._id}`)
-            setisUserChatsLoading(false )
-            
-            if(response.error){
-              return setUserChatsError(response)
+const updateCurrentChat= useCallback((chat)=>{
+  setCurrentchat(chat)
+}, [currentChat])
+const getUserChats = async()=>{
+  if(loginuser?._id){
+    setisUserChatsLoading(true )
+    setUserChatsError(null)
+      const response = await getRequest(`${Config.getuserchatapi}/${loginuser?._id}`)
+      setisUserChatsLoading(false)
+      
+      if(response.error){
+        return setUserChatsError(response)
 
-            }
-            console.log(response[0])
-            setUserChats(response[0])
-        }
-    }
+      }
+      console.log(response)
+      setUserChats(response)
+  }
+}
+
+useEffect(()=>{
     getUserChats()
-},[openChat])
-// console.log("userChats", userChats)
+},[])
+useEffect(()=>{
+  const getMeassages = async()=>{
+    setisMessagesLoading(true)
+    const response = await getRequest(`${Config.getmessagesapi}/${currentChat?._id}`)
+    setisMessagesLoading(false)
+    if(response.error){
+      return setmessagesError(response)
+    }
+    setMessages(response)
+  };
+  getMeassages()
+},[])
 // console.log("potentialChats", potentialChats)
   return (
     <ChatContext.Provider
-      value={{userChats,createChat, isuserChatsLoading, userChatsError,potentialChats}}
+      value={{userChats,createChat, isuserChatsLoading,messages, userChatsError,potentialChats, updateCurrentChat}}
     >
       {children}
     </ChatContext.Provider>
