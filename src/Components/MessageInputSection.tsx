@@ -4,7 +4,7 @@ import EmojiEmotionsOutlinedIcon from "@mui/icons-material/EmojiEmotionsOutlined
 import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
 import "./ChatContainer.css";
-import { selectedFilesArray } from "./Context";
+import { Authuser, selectedFilesArray } from "./Context";
 import { useContext, useEffect, useRef, useState } from "react";
 import { MdTextFormat } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
@@ -13,6 +13,7 @@ import { EditSave, EmojiSelect } from "../ReduxToolkit/ChatSlice";
 import TextEditer from "./TextEditer";
 import { MentionsInput, Mention } from "react-mentions";
 import userData from "../assets/UserMentionsData.json";
+import { ChatContext } from "../Context/ChatContext";
 
 const MessageInputSection = (props: any) => {
   const isReplayClicked = useSelector(
@@ -21,17 +22,22 @@ const MessageInputSection = (props: any) => {
   const { selectedFiles, setSelectedFiles } = useContext(selectedFilesArray);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [value, setValue] = useState();
-
+  const {sendTextMessage, currentChat}= useContext(ChatContext)
   const editMode = useSelector((state: any) => state.ChatSlice.editMode);
   const message = useSelector((state: any) => state.ChatSlice.Message);
   const editIndex = useSelector((state: any) => state.ChatSlice.editIndex);
+  const {loginuser} = useContext(Authuser)
+  const [typeMessage, setTypeMessage]= useState("")
   const dispatch = useDispatch();
 
   const handleEmojiSelect = (e: any) => {
     const emoji = e.native;
     dispatch(EmojiSelect(emoji));
   };
-
+  const handleOnchange=(e:any)=>{
+    const value= e.target.value
+    setTypeMessage(value)
+  }
   const emojiPickerRef = useRef<HTMLDivElement | null>(null);
 
   const handleClickOutside = (e: any) => {
@@ -105,8 +111,10 @@ const MessageInputSection = (props: any) => {
               onKeyDown={(e:any)=>handleEnterKeyPress(e)}
               className={props.isInputOpen ? "" : "mentioninputOpen"}
               singleLine
-              value={props.Message.message}
-              onChange={props.handlechangeMessage}
+              // value={props.Message.message}
+              value={typeMessage}
+              // onChange={props.handlechangeMessage}
+              onChange={handleOnchange}
               onDragOver={(e) => e.preventDefault()}
               onDrop={props.handleFileDrop}
             >
@@ -139,7 +147,7 @@ const MessageInputSection = (props: any) => {
                   <Picker data={data} onEmojiSelect={handleEmojiSelect} />
                 </div>
               )}
-              <label onClick={editMode ? handleEditSave : props.handleSend}>
+              <label /*onClick={editMode ? handleEditSave : props.handleSend}*/ onClick={()=>sendTextMessage(typeMessage, loginuser, currentChat?._id, setTypeMessage)}>
                 <AiOutlineSend className="sendIcon" />
               </label>
             </div>

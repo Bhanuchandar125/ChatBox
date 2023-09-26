@@ -4,24 +4,25 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { ExpandMore } from "@mui/icons-material";
 import { FcVideoCall } from "react-icons/fc";
 import MessageInputSection from "./MessageInputSection";
-import { openedChat, selectedFilesArray } from "./Context";
+import { Authuser, openedChat, selectedFilesArray } from "./Context";
 import { Avatar, MessageBox } from "react-chat-elements";
 import "react-chat-elements/dist/main.css";
 import MessageOptionsMenu from "./MessageMenu";
 import { EditSave, sendMessages, setMessage } from "../ReduxToolkit/ChatSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useFetchReciepient } from "../Hooks/useFetchReciepient";
+import { ChatContext } from "../Context/ChatContext";
 
 const ChatContainer = (props: any) => {
-console.log("props", props)
-  
   const { selectedFiles, setSelectedFiles } = useContext(selectedFilesArray);
   const [openedchat, setOpenedchat] = useState<any>({});
   const { openChat } = useContext(openedChat);
   const [editIndex, setEditIndex] = useState<number | null>(null);
   const [editedMessage, setEditedMessage] = useState("");
   const [isInputOpen, setIsInputOpen] = useState<boolean>(false);
-
+  const {currentChat, messages}= useContext(ChatContext)
+  const {loginUser} = useContext(Authuser)
+  const {reciepient}:any =useFetchReciepient(currentChat, loginUser)
   const displayMessage = useSelector(
     (state: any) => state.ChatSlice.displaymessages
   );
@@ -41,12 +42,11 @@ console.log("props", props)
       setIsInputOpen(false);
     }
   };
-
+console.log("messages",messages)
   useEffect(() => {
     const chat: any = localStorage.getItem("openedchat");
     setOpenedchat(JSON.parse(chat));
   }, [openChat]);
-
   const handlechangeMessage = (e: any) => {
     const message = e.target.value;
 
@@ -136,12 +136,12 @@ console.log("props", props)
         </div>
         <div className="userTag">
           <Avatar
-            src={openedchat?.profile_image}
+            src={reciepient?.profile_image}
             alt="avatar"
             size="xlarge"
             className="userProfileIcon"
           />
-          <span className="userTitle">{openedchat?.name}</span>
+          <span className="userTitle">{reciepient?.name}</span>
           <ExpandMore />
         </div>
 
@@ -152,7 +152,6 @@ console.log("props", props)
         <ul className="listcontainer">
           {displayMessage &&
             displayMessage.map((each: any, index: number) => {
-              // {console.log(each)}
               if (each.type && each.type.startsWith("video")) {
                 return (
                   <li
@@ -182,7 +181,6 @@ console.log("props", props)
                   </li>
                 );
               } else if (each.type && each.type.startsWith("image")) {
-                console.log(each.message);
                 return (
                   <li
                     key={index}
@@ -217,9 +215,7 @@ console.log("props", props)
                 each.message.includes("@")
               ) {
                 const messageText = each.message;
-                {
-                  console.log(parseMessage(messageText));
-                }
+
                 return (
                   // <>
                   //   <div className="  texteditContainer ">
@@ -286,43 +282,45 @@ console.log("props", props)
                 );
               } else {
                 return (
-                  <li
-                    key={index}
-                    className="imageContainer"
-                    onFocus={() => setFocusedmessageindex(index)}
-                    onBlur={() => setFocusedmessageindex(null)}
-                    onMouseEnter={() => setFocusedmessageindex(index)}
-                    onMouseLeave={() => setFocusedmessageindex(null)}
-                  >
-                    <MessageBox
-                      key={index}
-                      position="right"
-                      title={openedchat.name}
-                      type="text"
-                      text={each.message}
-                      date={new Date()}
-                      replyButton={false}
-                      avatar={openedchat?.profile_image}
-                      {...(each.prevMessage.trim() !== ""
-                        ? {
-                            reply: {
-                              title: openedchat.name,
-                              titleColor: "#8717ae",
-                              message: each.prevMessage,
-                            },
-                          }
-                        : {})}
-                    />
+                  
+                  
+                  // <li
+                  //   key={index}
+                  //   className="imageContainer"
+                  //   onFocus={() => setFocusedmessageindex(index)}
+                  //   onBlur={() => setFocusedmessageindex(null)}
+                  //   onMouseEnter={() => setFocusedmessageindex(index)}
+                  //   onMouseLeave={() => setFocusedmessageindex(null)}
+                  // >
+                  //   <MessageBox
+                  //     key={index}
+                  //     position="right"
+                  //     title={openedchat.name}
+                  //     type="text"
+                  //     text={each.message}
+                  //     date={new Date()}
+                  //     replyButton={false}
+                  //     avatar={openedchat?.profile_image}
+                  //     {...(each.prevMessage.trim() !== ""
+                  //       ? {
+                  //           reply: {
+                  //             title: openedchat.name,
+                  //             titleColor: "#8717ae",
+                  //             message: each.prevMessage,
+                  //           },
+                  //         }
+                  //       : {})}
+                  //   />
 
-                    {focusedMessageindex === index && (
-                      <MessageOptionsMenu
-                        Message={each.message}
-                        type="text"
-                        id={index}
-                        className="messageMenu"
-                      />
-                    )}
-                  </li>
+                  //   {focusedMessageindex === index && (
+                  //     <MessageOptionsMenu
+                  //       Message={each.message}
+                  //       type="text"
+                  //       id={index}
+                  //       className="messageMenu"
+                  //     />
+                  //   )}
+                  // </li>
                 );
               }
             })}

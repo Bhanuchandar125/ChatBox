@@ -6,7 +6,7 @@ function InitialChatcontainer() {
   
   return (
     <div className="chatHeading">
-      <h1>welcome, {loginuser.name}!</h1>
+      <h1>welcome, {loginuser?.name}!</h1>
       <p>Ready? Set. Chat! Let's jump right into things.</p>
       <div className="d-flex chatImages">
         <div>

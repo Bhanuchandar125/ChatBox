@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { BsChatRightText } from "react-icons/bs";
 import { GoPeople } from "react-icons/go";
 import { BiVideoPlus } from "react-icons/bi";
@@ -9,7 +9,7 @@ import { ChatList } from "react-chat-elements";
 import data from "../assets/UserData.json";
 import "simplebar-react/dist/simplebar.min.css";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Authuser, openedChat } from "./Context";
+import { Authuser, openedChat, userloginstatus } from "./Context";
 import Form from "react-bootstrap/Form";
 import InitialChatcontainer from "./InitialChatcontainer";
 import { ChatContext } from "../Context/ChatContext";
@@ -21,30 +21,46 @@ const Body = () => {
   const { openChat, setOpenChat } = useContext(openedChat);
   const [chatList, setChatlist] = useState(data);
   const [search, setSearch] = useState("");
-  const { loginuser } = useContext(Authuser);
+  const { loginuser, setLoginuser } = useContext(Authuser);
   const [addbtnclicked, setAddbtnclicked] = useState(false);
 
-  const { userChats,messages, isuserChatsLoading, userChatsError, potentialChats } =
+  const { users, getUserChats, userChats,messages, isuserChatsLoading, updateCurrentChat, potentialChats } =
     useContext(ChatContext);
+ const {islogin, setIslogin}= useContext(userloginstatus);
 
-  console.log("userChats",userChats);
-  console.log("messages", messages)
+ const user= localStorage.getItem("user")
+ 
+
 
   const handleopenchat = (chat: any) => {
     setOpenChat(chat);
-    localStorage.setItem("openedchat", JSON.stringify(chat));
+    localStorage.setItem("openedchat",JSON.stringify(chat));
     setChatlist(data);
     setSearch("");
+    updateCurrentChat(chat)
   };
   const handleSearch = (e: any) => {
     setSearch(e.target.value);
     const filteredData = data.filter((each) =>
       each?.name.toLowerCase().includes(e.target.value)
     );
-    console.log(filteredData);
+    
     setChatlist(filteredData);
     setChatClicked(true);
   };
+  useEffect(()=>{
+    
+    if(user){
+      const parseUser =JSON.parse(user)
+      const loginuser= users.filter((each:any)=>each._id===parseUser._id)
+      setLoginuser(...loginuser)
+      
+    }
+  },[])
+  useEffect(() => {
+    getUserChats();
+  }, [loginuser, addbtnclicked]);
+
   const scrollableNodeRef = React.createRef();
   return (
     <div className="container-fluid">
@@ -73,7 +89,7 @@ const Body = () => {
 
                 {chatClicked
                   ?isuserChatsLoading && <p>ChatList Loading...</p> || userChats?.map((chat: any, index: number) => (
-                    <Chat key={index} chat={chat} user={loginuser} handleopenchat={handleopenchat}/>
+                    <Chat key={index} chat={chat} user={loginuser} handleopenchat={()=>handleopenchat(chat)}/>
                       
                     ))
                   : null}

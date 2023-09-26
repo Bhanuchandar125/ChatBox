@@ -43,9 +43,9 @@ const Login = () => {
     if (response.error) {
       alert("Invalid Email/Password");
     } else {
-      setLoginuser(response);
+      setLoginuser(response[0]);
       setIslogin(true);
-      localStorage.setItem("user", response.token);
+      localStorage.setItem("user", JSON.stringify(response));
       alert("login successfully completed");
     }
 
