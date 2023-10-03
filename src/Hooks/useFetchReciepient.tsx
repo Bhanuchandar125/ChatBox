@@ -7,8 +7,9 @@ export const useFetchReciepient =(chat:any, user:any)=>{
     const [reciepient, setReciepient] = useState(null);
     const [error, setError] = useState(null)
     
-    const reciepientId= chat?.members?.find((id:any)=>id!==user?._id);
-
+    const reciepientId= chat?.members?.find((each:any)=>each!==user?._id);
+    // console.log("from useFetch",chat)
+    // console.log("from useFetch UID",user)
     useEffect(()=>{
         const getuser = async ()=>{
             if(!reciepientId) return null
@@ -21,5 +22,5 @@ export const useFetchReciepient =(chat:any, user:any)=>{
         }
         getuser();
     }, []);
-    return {reciepient}
+    return reciepient
 }

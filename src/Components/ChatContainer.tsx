@@ -4,7 +4,7 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { ExpandMore } from "@mui/icons-material";
 import { FcVideoCall } from "react-icons/fc";
 import MessageInputSection from "./MessageInputSection";
-import { Authuser, openedChat, selectedFilesArray } from "./Context";
+import {  openedChat, selectedFilesArray } from "./Context";
 import { Avatar, MessageBox } from "react-chat-elements";
 import "react-chat-elements/dist/main.css";
 import MessageOptionsMenu from "./MessageMenu";
@@ -20,9 +20,12 @@ const ChatContainer = (props: any) => {
   const [editIndex, setEditIndex] = useState<number | null>(null);
   const [editedMessage, setEditedMessage] = useState("");
   const [isInputOpen, setIsInputOpen] = useState<boolean>(false);
-  const {currentChat, messages}= useContext(ChatContext)
-  const {loginUser} = useContext(Authuser)
-  const {reciepient}:any =useFetchReciepient(currentChat, loginUser)
+  const { currentChat, messages } = useContext<any>(ChatContext);
+  const [Receipient, setReceipient] = useState<any>(null)
+  
+  const user: any = localStorage.getItem("user");
+  const loginuser = JSON.parse(user);
+
   const displayMessage = useSelector(
     (state: any) => state.ChatSlice.displaymessages
   );
@@ -30,7 +33,9 @@ const ChatContainer = (props: any) => {
   const [focusedMessageindex, setFocusedmessageindex] = useState<number | null>(
     null
   );
-
+  const reciepient = useFetchReciepient(currentChat, loginuser)  
+  
+console.log("Receipient", reciepient)
   const dispatch = useDispatch();
 
   const handleSend = () => {
@@ -42,7 +47,7 @@ const ChatContainer = (props: any) => {
       setIsInputOpen(false);
     }
   };
-console.log("messages",messages)
+  console.log("messages", messages);
   useEffect(() => {
     const chat: any = localStorage.getItem("openedchat");
     setOpenedchat(JSON.parse(chat));
@@ -163,7 +168,7 @@ console.log("messages",messages)
                     key={index}
                   >
                     <MessageBox
-                      position={"right"}
+                      position={"left"}
                       type={"video"}
                       title={openedchat.name}
                       data={{
@@ -217,32 +222,7 @@ console.log("messages",messages)
                 const messageText = each.message;
 
                 return (
-                  // <>
-                  //   <div className="  texteditContainer ">
-                  //     <div className="textHead">
-                  //       <div className="d-flex ">
-                  //       <Avatar
-                  //         alt={openedchat.name}
-                  //         src={openedchat?.profile_image}
-                  //       />
-                  //       <label className="chatname">{openedchat.name}</label>
-                  //       </div>
-                  //       <MessageOptionsMenu
-                  //         Message={each.message}
-                  //         type="text"
-                  //         id={index}
-
-                  //       />
-                  //     </div>
-                  //     <div
-                  //       className="chattext"
-                  //       dangerouslySetInnerHTML={{
-                  //         __html: htmlText(each.message),
-                  //       }}
-                  //     ></div>
-                  //     <label className="textTime">just now</label>
-                  //   </div>
-                  // </>
+                  
                   <li
                     key={index}
                     className="imageContainer"
@@ -282,45 +262,43 @@ console.log("messages",messages)
                 );
               } else {
                 return (
-                  
-                  
-                  // <li
-                  //   key={index}
-                  //   className="imageContainer"
-                  //   onFocus={() => setFocusedmessageindex(index)}
-                  //   onBlur={() => setFocusedmessageindex(null)}
-                  //   onMouseEnter={() => setFocusedmessageindex(index)}
-                  //   onMouseLeave={() => setFocusedmessageindex(null)}
-                  // >
-                  //   <MessageBox
-                  //     key={index}
-                  //     position="right"
-                  //     title={openedchat.name}
-                  //     type="text"
-                  //     text={each.message}
-                  //     date={new Date()}
-                  //     replyButton={false}
-                  //     avatar={openedchat?.profile_image}
-                  //     {...(each.prevMessage.trim() !== ""
-                  //       ? {
-                  //           reply: {
-                  //             title: openedchat.name,
-                  //             titleColor: "#8717ae",
-                  //             message: each.prevMessage,
-                  //           },
-                  //         }
-                  //       : {})}
-                  //   />
+                  <li
+                    key={index}
+                    className="imageContainer"
+                    onFocus={() => setFocusedmessageindex(index)}
+                    onBlur={() => setFocusedmessageindex(null)}
+                    onMouseEnter={() => setFocusedmessageindex(index)}
+                    onMouseLeave={() => setFocusedmessageindex(null)}
+                  >
+                    <MessageBox
+                      key={index}
+                      position="right"
+                      title={openedchat.name}
+                      type="text"
+                      text={each.message}
+                      date={new Date()}
+                      replyButton={false}
+                      avatar={openedchat?.profile_image}
+                      {...(each.prevMessage.trim() !== ""
+                        ? {
+                            reply: {
+                              title: openedchat.name,
+                              titleColor: "#8717ae",
+                              message: each.prevMessage,
+                            },
+                          }
+                        : {})}
+                    />
 
-                  //   {focusedMessageindex === index && (
-                  //     <MessageOptionsMenu
-                  //       Message={each.message}
-                  //       type="text"
-                  //       id={index}
-                  //       className="messageMenu"
-                  //     />
-                  //   )}
-                  // </li>
+                    {focusedMessageindex === index && (
+                      <MessageOptionsMenu
+                        Message={each.message}
+                        type="text"
+                        id={index}
+                        className="messageMenu"
+                      />
+                    )}
+                  </li>
                 );
               }
             })}

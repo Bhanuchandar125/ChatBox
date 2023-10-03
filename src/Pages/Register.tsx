@@ -3,11 +3,8 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import "./Register.css";
 import Config from "../Components/Config";
-import axios from 'axios';
 import { useNavigate } from "react-router-dom";
-import { Snackbar } from "@mui/material";
-import { useState } from "react";
-
+import { postRequest } from "../apiCalls/UserCalls";
 
 const schema = yup
   .object({
@@ -25,21 +22,12 @@ const schema = yup
         "Password must contain at least one special character (!@#$%^&*)"
       )
       .min(8, "Password must be at least 8 characters long"),
-    })
+  })
   .required();
 
-  
 const Register = () => {
-    const [snackbarOpen, setSnackbarOpen] = useState(false);
-    const navigate = useNavigate()
+  const navigate = useNavigate();
 
-    const handleSnackbarOpen = () => {
-        setSnackbarOpen(true);
-      };
-    
-      const handleSnackbarClose = () => {
-        setSnackbarOpen(false);
-      };
   const {
     register,
     handleSubmit,
@@ -47,21 +35,17 @@ const Register = () => {
     reset,
   } = useForm({ resolver: yupResolver(schema) });
 
-  const onSubmit = async(values: any) => {
-    
-  try{
-    const res = await axios({
-        method: "Post",
-        url: Config.registerapi ,
-        data: values,
-      });
-    
-      alert ("Registration completed...")
-      navigate("/login")
-  }catch(error:any){
-    alert(error.response.data)
- }
-  reset();
+  const onSubmit = async (values: any) => {
+    const response = await postRequest(`${Config.registerapi}`, values);
+
+    if (response.error) {
+      console.log("registration error", response);
+      alert("Server error...")
+    } else {
+      alert("Registration completed Successfully...");
+      navigate("/login");
+    }
+    reset();
   };
 
   return (
@@ -98,12 +82,6 @@ const Register = () => {
           already registered? Login
         </a>
       </div>
-      {/* <Snackbar
-        open={snackbarOpen}
-        autoHideDuration={6000}
-        onClose={handleSnackbarClose}
-        message="Form submitted successfully!"
-      /> */}
     </div>
   );
 };

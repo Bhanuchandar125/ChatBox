@@ -3,11 +3,13 @@ import { ChatList } from "react-chat-elements";
 import { useFetchReciepient } from "../Hooks/useFetchReciepient";
 import { ChatContext } from "../Context/ChatContext";
 
-const Chat = ({ chat, key, user, handleopenchat }) => {
-  const { reciepient }: any = useFetchReciepient(chat, user);
-  
-  const {updateCurrentChat} = useContext(ChatContext)
+const Chat = (props:any) => {
 
+  const  reciepient : any = useFetchReciepient(props.chat, props.user);
+  
+  const {updateCurrentChat} = useContext<any>(ChatContext)
+  
+  
   return (
     <div>
       <ChatList
@@ -15,15 +17,16 @@ const Chat = ({ chat, key, user, handleopenchat }) => {
         className="chat-list"
         dataSource={[
           {
-            id:key,
-            avatar: reciepient?.profile_image,
+            id:props.key,
+            avatar:reciepient?.image,
             alt: reciepient?.name,
             title: reciepient?.name,
             subtitle: reciepient?.recent_message,
-            date: reciepient?.last_message_Date,
+            // date: reciepient?.updatedAt,
+            unread:0
           },
         ]}
-        onClick={() => handleopenchat(()=>updateCurrentChat(chat))}
+        onClick={() =>  props.handleopenchat()}
       />
     </div>
   );

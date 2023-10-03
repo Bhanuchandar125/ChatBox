@@ -5,68 +5,59 @@ import { BiVideoPlus } from "react-icons/bi";
 import { GrAdd } from "react-icons/gr";
 import ChatContainer from "./ChatContainer";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { ChatList } from "react-chat-elements";
 import data from "../assets/UserData.json";
 import "simplebar-react/dist/simplebar.min.css";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Authuser, openedChat, userloginstatus } from "./Context";
+import { Authuser } from "./Context";
 import Form from "react-bootstrap/Form";
 import InitialChatcontainer from "./InitialChatcontainer";
 import { ChatContext } from "../Context/ChatContext";
 import PotentialUsers from "./PotentialUsers";
-import Chat from "./chat";
+import Chat from "./Chat.tsx";
 
 const Body = () => {
   const [chatClicked, setChatClicked] = useState<boolean>(false);
-  const { openChat, setOpenChat } = useContext(openedChat);
-  const [chatList, setChatlist] = useState(data);
   const [search, setSearch] = useState("");
   const { loginuser, setLoginuser } = useContext(Authuser);
   const [addbtnclicked, setAddbtnclicked] = useState(false);
 
-  const { users, getUserChats, userChats,messages, isuserChatsLoading, updateCurrentChat, potentialChats } =
-    useContext(ChatContext);
- const {islogin, setIslogin}= useContext(userloginstatus);
-
- const user= localStorage.getItem("user")
- 
-
+  const {
+    users,
+    getUserChats,
+    userChats,
+    messages,
+    isuserChatsLoading,
+    updateCurrentChat,
+    potentialChats,
+    currentChat
+  } = useContext<any>(ChatContext);
 
   const handleopenchat = (chat: any) => {
-    setOpenChat(chat);
-    localStorage.setItem("openedchat",JSON.stringify(chat));
-    setChatlist(data);
+    localStorage.setItem("openedchat", JSON.stringify(chat));
     setSearch("");
-    updateCurrentChat(chat)
+    updateCurrentChat(chat);
   };
   const handleSearch = (e: any) => {
     setSearch(e.target.value);
     const filteredData = data.filter((each) =>
       each?.name.toLowerCase().includes(e.target.value)
     );
-    
-    setChatlist(filteredData);
     setChatClicked(true);
   };
-  useEffect(()=>{
-    
-    if(user){
-      const parseUser =JSON.parse(user)
-      const loginuser= users.filter((each:any)=>each._id===parseUser._id)
-      setLoginuser(...loginuser)
-      
-    }
-  },[])
-  useEffect(() => {
-    getUserChats();
-  }, [loginuser, addbtnclicked]);
 
-  const scrollableNodeRef = React.createRef();
+  useEffect(() => {
+    const user = localStorage.getItem("user")
+    if(user){
+      setLoginuser(JSON.parse(user))
+    }
+     getUserChats ();
+    
+  }, []);
   return (
     <div className="container-fluid">
       <div className="row">
-        <div className="appContainer  ">
-          <div className="col-md-3  sideSection ">
+        <div className="appContainer">
+          <div className="col-md-3  sideSection">
             <Form>
               <Form.Control
                 type="search"
@@ -88,9 +79,14 @@ const Body = () => {
                 <ExpandMoreIcon className="expandmore" />
 
                 {chatClicked
-                  ?isuserChatsLoading && <p>ChatList Loading...</p> || userChats?.map((chat: any, index: number) => (
-                    <Chat key={index} chat={chat} user={loginuser} handleopenchat={()=>handleopenchat(chat)}/>
-                      
+                  ? (isuserChatsLoading && <p>ChatList Loading...</p>) ||
+                    userChats?.map((chat: any, index: number) => (
+                      <Chat
+                        key={index}
+                        chat={chat}
+                        user={loginuser}
+                        handleopenchat={() => handleopenchat(chat)}
+                      />
                     ))
                   : null}
               </div>
@@ -115,7 +111,7 @@ const Body = () => {
           </div>
           <div className=" col-md-9 mainSection ">
             {localStorage.getItem("openedchat") ? (
-              <ChatContainer user={loginuser} chat={userChats} />
+              <ChatContainer chat={userChats} />
             ) : (
               <div>
                 <InitialChatcontainer />
