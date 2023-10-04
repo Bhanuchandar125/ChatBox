@@ -7,6 +7,7 @@ import {
 } from "react";
 import { getRequest, postRequest } from "../apiCalls/UserCalls";
 import Config from "../Components/Config";
+import {io} from "socket.io-client"
 
 
 export const ChatContext = createContext();
@@ -23,9 +24,30 @@ export const ChatContextProvider = ({ children }) => {
   const [users, setUsers] = useState<any>([]);
   const [sendTextMessageError, setSendTextMessageError] = useState<any>(null);
   const [newMessage, setNewMessage] = useState<any>(null);
+  const [socket, setSocket]= useState<any>(null)
+  const [onlineUsers, setOnlineusers]= useState([])
 
   const user: any = localStorage.getItem("user");
   const loginuser = JSON.parse(user);
+
+console.log("onlineusers", onlineUsers)
+  //initialize socket io
+
+  useEffect(()=>{
+    const newSocket = io("http://localhost:3000");
+    setSocket(newSocket);
+    return ()=>{
+      newSocket.disconnect()
+    }
+  }, [users])
+  useEffect(()=>{
+    if(socket===null) return; 
+    socket.emit("addNewUser", loginuser?._id)
+    socket.on("getOnlineUsers", (res:any)=>{
+      console.log("res", res)
+      setOnlineusers(res)
+    })
+  },[socket])
 
   const getusers = async () => {
     const response = await getRequest(Config.usersapi);

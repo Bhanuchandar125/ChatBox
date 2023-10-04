@@ -14,18 +14,21 @@ import { useFetchReciepient } from "../Hooks/useFetchReciepient";
 import { ChatContext } from "../Context/ChatContext";
 
 const ChatContainer = (props: any) => {
+  const {currentChat, messages} = useContext<any>(ChatContext);
+  const user: any = localStorage.getItem("user");
+  const loginuser = JSON.parse(user);
+
+  const reciepient:any = useFetchReciepient(currentChat, loginuser)  
+  
+  console.log("Receipient", reciepient)
+
   const { selectedFiles, setSelectedFiles } = useContext(selectedFilesArray);
   const [openedchat, setOpenedchat] = useState<any>({});
   const { openChat } = useContext(openedChat);
   const [editIndex, setEditIndex] = useState<number | null>(null);
   const [editedMessage, setEditedMessage] = useState("");
   const [isInputOpen, setIsInputOpen] = useState<boolean>(false);
-  const { currentChat, messages } = useContext<any>(ChatContext);
-  const [Receipient, setReceipient] = useState<any>(null)
-  
-  const user: any = localStorage.getItem("user");
-  const loginuser = JSON.parse(user);
-
+   
   const displayMessage = useSelector(
     (state: any) => state.ChatSlice.displaymessages
   );
@@ -33,9 +36,8 @@ const ChatContainer = (props: any) => {
   const [focusedMessageindex, setFocusedmessageindex] = useState<number | null>(
     null
   );
-  const reciepient = useFetchReciepient(currentChat, loginuser)  
   
-console.log("Receipient", reciepient)
+
   const dispatch = useDispatch();
 
   const handleSend = () => {
