@@ -355,3 +355,23 @@
   justify-content: center;
   align-items: center;
 }
+
+.chat-online{
+  height:10px;
+  width:10px;
+  border-radius: 50%;
+  background-color: green;
+  position: relative;
+  
+  margin-bottom: 0;
+}
+.chatList-online{
+  height:10px;
+  width:10px;
+  border-radius: 50%;
+  background-color: green;
+  position: relative;
+  top: -32px;
+  margin-bottom: 0;
+  right: -46px;
+}

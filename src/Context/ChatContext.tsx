@@ -44,9 +44,12 @@ console.log("onlineusers", onlineUsers)
     if(socket===null) return; 
     socket.emit("addNewUser", loginuser?._id)
     socket.on("getOnlineUsers", (res:any)=>{
-      console.log("res", res)
+      
       setOnlineusers(res)
-    })
+    });
+    return ()=>{
+      socket.off("getOnlineUsers");
+    };
   },[socket])
 
   const getusers = async () => {
@@ -160,6 +163,7 @@ const updateCurrentChat = (chat:any)=>{
         updateCurrentChat,
         sendTextMessage,
         currentChat,
+        onlineUsers
       }}
     >
       {children}

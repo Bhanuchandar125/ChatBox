@@ -7,11 +7,11 @@ import Config from "./Config";
 import { Authuser } from "./Context";
 
 const PotentialUsers = () => {
-  const { userChats,createChat, potentialChats } = useContext(ChatContext);
+  const { userChats,createChat, potentialChats, onlineUsers } = useContext(ChatContext);
   const [dialogueOpen, setDialogueopen] = useState(false);
   const [selectedUser, setSelecteduser] = useState<any>(null)
   const {loginuser} = useContext(Authuser)
-
+  console.log("onlineUsers", onlineUsers)
   const clickOnPotentialuser = (chat:any) => {
     setDialogueopen(true);
     setSelecteduser(chat)
@@ -44,6 +44,10 @@ const PotentialUsers = () => {
               
               <Avatar></Avatar>
               <label>{chat.name}</label>
+              {onlineUsers.some((user:any)=>user.userId===chat._id)?
+              (
+                <label className="chat-online"></label>
+              ):""}
               
             </div>
             {selectedUser!==null && (
