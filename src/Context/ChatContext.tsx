@@ -40,6 +40,7 @@ console.log("onlineusers", onlineUsers)
       newSocket.disconnect()
     }
   }, [users])
+  //add  onlineUsers
   useEffect(()=>{
     if(socket===null) return; 
     socket.emit("addNewUser", loginuser?._id)
@@ -51,6 +52,30 @@ console.log("onlineusers", onlineUsers)
       socket.off("getOnlineUsers");
     };
   },[socket])
+
+  //send Message
+  useEffect(()=>{
+    if(socket===null) return; 
+
+    const reciepientId= currentChat?.members?.find((each:any)=>each!==user?._id);
+    
+    socket.emit("sendMessage", {...newMessage, reciepientId})
+  },[newMessage])
+
+  //receive message
+  useEffect(()=>{
+    if(socket===null) return; 
+
+    socket.on("getMessage", (res:any)=>{
+      if(currentChat?._id!==res.chatId) return;
+
+      setMessages((prev:any)=>[...prev, res])
+    })
+
+    return ()=>{
+      socket.off("getMessage")
+    }
+  },[socket, currentChat])
 
   const getusers = async () => {
     const response = await getRequest(Config.usersapi);
@@ -112,11 +137,16 @@ const updateCurrentChat = (chat:any)=>{
     }
   };
   const sendTextMessage = useCallback(
-    async (textMessage, sender, currentChatId, setTypeMessage) => {
+    async (textMessage:any, sender:any, currentChatId:any, setTypeMessage:any) => {
+      // console.log("textMessage", textMessage)
+      // console.log("sender", sender)
+      // console.log("currentChatId", currentChatId)
+      
+      
       if (!textMessage) return console.log("You Must type something...");
       const resp = await postRequest(
         `${Config.createmessageapi}`,
-        JSON.stringify({
+        ({
           chatId: currentChatId,
           senderId: sender?._id,
           text: textMessage,
@@ -127,7 +157,7 @@ const updateCurrentChat = (chat:any)=>{
       }
       setNewMessage(resp);
       setTypeMessage(" ");
-      setMessages((prev) => [...prev, resp]);
+      setMessages((prev:any) => [...prev, resp]);
     },
     []
   );

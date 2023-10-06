@@ -20,7 +20,9 @@ const ChatContainer = (props: any) => {
 
   const reciepient:any = useFetchReciepient(currentChat, loginuser)  
   
-  console.log("Receipient", reciepient)
+  // console.log("Receipient", reciepient)
+  console.log("messages", messages)
+  // console.log("currentChat", currentChat)
 
   const { selectedFiles, setSelectedFiles } = useContext(selectedFilesArray);
   const [openedchat, setOpenedchat] = useState<any>({});
@@ -44,12 +46,12 @@ const ChatContainer = (props: any) => {
     if (selectedFiles.length !== 0) {
       dispatch(sendMessages([...selectedFiles]));
       setSelectedFiles([]);
-    } else if (Message.message?.trim() !== "") {
+    } else if (Message.text?.trim() !== "") {
       dispatch(sendMessages(Message));
       setIsInputOpen(false);
     }
   };
-  console.log("messages", messages);
+  
   useEffect(() => {
     const chat: any = localStorage.getItem("openedchat");
     setOpenedchat(JSON.parse(chat));
@@ -157,9 +159,9 @@ const ChatContainer = (props: any) => {
       <hr />
       <div className="chatBody">
         <ul className="listcontainer">
-          {displayMessage &&
-            displayMessage.map((each: any, index: number) => {
-              if (each.type && each.type.startsWith("video")) {
+          {messages &&
+            messages.map((each?: any, index: number) => {
+              if (each?.type && each?.type?.startsWith("video")) {
                 return (
                   <li
                     className="videoContainer"
@@ -174,20 +176,20 @@ const ChatContainer = (props: any) => {
                       type={"video"}
                       title={openedchat.name}
                       data={{
-                        uri: each.message,
+                        uri: each?.message,
                       }}
                     />
                     {focusedMessageindex === index && (
                       <MessageOptionsMenu
-                        Message={each.url}
-                        type={each.type}
+                        Message={each?.url}
+                        type={each?.type}
                         id={index}
                         className="messageMenu"
                       />
                     )}
                   </li>
                 );
-              } else if (each.type && each.type.startsWith("image")) {
+              } else if (each?.type && each?.type?.startsWith("image")) {
                 return (
                   <li
                     key={index}
@@ -202,14 +204,14 @@ const ChatContainer = (props: any) => {
                       type={"photo"}
                       title={openedchat.name}
                       data={{
-                        uri: each.message,
+                        uri: each?.message,
                         height: 150,
                         width: 300,
                       }}
                     />
                     {focusedMessageindex === index && (
                       <MessageOptionsMenu
-                        Message={each.message}
+                        Message={each?.message}
                         type="text"
                         id={index}
                         className="messageMenu"
@@ -218,10 +220,10 @@ const ChatContainer = (props: any) => {
                   </li>
                 );
               } else if (
-                each.message.startsWith("<") ||
-                each.message.includes("@")
+                each?.text.startsWith("<") ||
+                each?.text.includes("@")
               ) {
-                const messageText = each.message;
+                const messageText = each?.message;
 
                 return (
                   
@@ -238,23 +240,23 @@ const ChatContainer = (props: any) => {
                       position="right"
                       title={openedchat.name}
                       type="text"
-                      text={parseMessage(each.message)}
+                      text={parseMessage(each?.message)}
                       date={new Date()}
                       replyButton={false}
                       avatar={openedchat?.profile_image}
-                      {...(each.prevMessage.trim() !== ""
+                      {...(each?.prevMessage?.trim() !== ""
                         ? {
                             reply: {
                               title: openedchat.name,
                               titleColor: "#8717ae",
-                              message: each.prevMessage,
+                              message: each?.prevMessage,
                             },
                           }
                         : {})}
                     />
                     {focusedMessageindex === index && (
                       <MessageOptionsMenu
-                        Message={each.message}
+                        Message={each?.message}
                         type="text"
                         id={index}
                         className="messageMenu"
@@ -274,19 +276,18 @@ const ChatContainer = (props: any) => {
                   >
                     <MessageBox
                       key={index}
-                      position="right"
-                      title={openedchat.name}
+                      position={(each?.senderId ===loginuser._id)?"right":"left"}
+                      title={(each?.senderId ===loginuser._id)?openedchat.name:reciepient?.name}
                       type="text"
-                      text={each.message}
-                      date={new Date()}
+                      text={each?.text}
+                      date={each?.updatedAt}
                       replyButton={false}
                       avatar={openedchat?.profile_image}
-                      {...(each.prevMessage.trim() !== ""
-                        ? {
+                      {...(each?.prevMessage? {
                             reply: {
                               title: openedchat.name,
                               titleColor: "#8717ae",
-                              message: each.prevMessage,
+                              message: each?.prevMessage,
                             },
                           }
                         : {})}
@@ -294,7 +295,7 @@ const ChatContainer = (props: any) => {
 
                     {focusedMessageindex === index && (
                       <MessageOptionsMenu
-                        Message={each.message}
+                        Message={each?.text}
                         type="text"
                         id={index}
                         className="messageMenu"
